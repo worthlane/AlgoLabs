@@ -462,6 +462,12 @@ int pop(struct Stack* st)
 
     (st->array)[(st->size)] = 0;
 
+    // FOR NEXT IF ---v
+    // if we will divide capacity by 2, we will have situations like:
+    //   pop when (size == 0.5 * capacity) cause realloc
+    //   push after that pop will also cause realloc (size == capacity)
+    //   so, let's divide by 4, to avoid two reallocs
+
     if (st->size <= st->capacity / 4)
         StackRealloc(st, st->capacity / 2);
 
