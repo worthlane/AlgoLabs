@@ -43,9 +43,20 @@ size_3 time_3
 
 ## Пункт 4. Быстрые сортировки (партиционирования и оптимизации)
 
+Шаблон для тестирования функций с разными Partition:
+big_tests
+```
+TestSort(0, 1000000, 10000, "big_tests/", "4_point_results/big_tests/[...]_sort.txt", [...]_sort);
+```
+tests_most_dublicates
+```
+TestSort(0, 1000000, 10000, "tests_most_dublicates/", "4_point_results/tests_most_dublicates/[...]_sort.txt", [...]_sort);
+```
+
 
 ## Пункт 5. Быстрые сортировки (разные стратегии выбора, прочее)
 
+Самая быстрая сортировка - с выбором центрального опорного элемента
 
 ## Пункт 6. Выбор размера блоков для Introsort
 

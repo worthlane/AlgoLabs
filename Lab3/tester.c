@@ -6,6 +6,8 @@
 #include "testing.h"
 
 #include "quadratic_sorts.h"
+#include "quick_part_sorts.h"
+#include "quick_pivots_sorts.h"
 
 
 int Comparator(const void* a, const void* b) {
@@ -16,7 +18,10 @@ void StdQuick_sort(int* arr, size_t n);
 
 int main(const int argc, const char* argv[])
 {
-    double* times = TestSort(0, 1000, 50, "small_tests/", "1_point_results/Selection_sort.txt", Selection_sort);
+    srand(clock());
+
+    double* times = TestSort(1, 150, 1, "very_small_tests/",
+                            "6_point_results/Shell_sort.txt", Shell_sort);
 
     free(times);
 
@@ -24,7 +29,7 @@ int main(const int argc, const char* argv[])
 
     //int array[0] = {};
 
-    Insertion_sort(array, 10);
+    RandPivot_sort(array, 10);
 
     for (size_t i = 0; i < 10; i++)
         printf("%d ", array[i]);*/

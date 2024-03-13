@@ -3,12 +3,7 @@
 
 #include <stdio.h>
 
-void Swap(int* a, int* b)
-{
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
+#include "common.h"
 
 //---------------------------------------------------
 
@@ -54,6 +49,30 @@ void Selection_sort(int* arr, size_t n)
         {
             if (arr[i] > arr[j])
                 Swap(&arr[i], &arr[j]);
+        }
+    }
+}
+
+//---------------------------------------------------
+
+void Shell_sort(int* arr, size_t n)
+{
+    int step = 1;
+
+    while (step <= n / 9)
+        step = step * 3 + 1;
+
+    for (; step > 0; step /= 3)
+    {
+        for (int i = step; i < n; i += step)
+        {
+            int j   = i;
+            int key = arr[i];
+
+            for (; j >= step && arr[j - step] > key; j -= step)
+                arr[j] = arr[j - step];
+
+            arr[j] = key;
         }
     }
 }

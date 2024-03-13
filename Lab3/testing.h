@@ -6,7 +6,7 @@
 #include <time.h>
 
 static const size_t K               = 5;
-static const size_t MAX_FILE_NAME   = 30;
+static const size_t MAX_FILE_NAME   = 64;
 
 // -------------------------------------------------------------------------
 
@@ -116,7 +116,7 @@ double* TestSort(const int from, const int to, const int step,
 
         double avg_time = ((double) duration) / (CLOCKS_PER_SEC * K);
 
-        fprintf(fp, "%zu %lf\n", size, avg_time);
+        fprintf(fp, "%zu %.7lf\n", size, avg_time);
 
         times[test_index++] = avg_time;
     }
