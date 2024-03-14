@@ -11,7 +11,7 @@ int main(const int argc, const char* argv[])
         return 1;
     }
 
-    srand(clock());
+    srand(clock() * time(NULL));
 
     size_t       array_len  = atoi(argv[1]);
     int          max_num    = atoi(argv[2]);
