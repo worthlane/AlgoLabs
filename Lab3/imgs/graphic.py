@@ -1,13 +1,11 @@
 import matplotlib.pyplot as plt
 
-# Функция для чтения данных из файла
 def read_data(file_name):
     with open(file_name, 'r') as file:
         lines = file.readlines()
         data = [tuple(map(float, line.strip().split())) for line in lines]
     return data
 
-# Функция для построения графика
 def plot_data(file_data):
     plt.figure(figsize=(10, 6))
 
@@ -18,19 +16,16 @@ def plot_data(file_data):
 
     plt.xlabel('Array size (n)')
     plt.ylabel('Time (s)')
-    plt.title('Comparison of heapsort speed depending on heap multiplicity')
+    plt.title('All sortings comparison')
     plt.legend()
     plt.grid(True)
     plt.show()
 
-# Задаем имена файлов с данными и имена для кривых
-file_names = ['2_Pyramid_sort.txt', '6_Pyramid_sort.txt', '10_Pyramid_sort.txt']
-curve_names = ['multiplicity 2', 'multiplicity 6', 'multiplicity 10']
+file_names = ['Heap_sort.txt', 'HoareCentralPivot_sort.txt', 'Intro_sort.txt', 'IterativeMerge_sort.txt', 'LSD_sort.txt', 'OneBranchHoareQuick_sort.txt', 'StdQuick_sort.txt' ]
+curve_names = ['Heapsort', 'Quicksort (Hoare + Central pivot)', 'Introspective sort', 'Iterative Merge sort', 'LSD sort', 'Quicksort (One branch Hoare)', 'Standart qsort']
 
-# Считываем данные и сохраняем их в словаре с именами кривых
 file_data = {}
 for name, file_name in zip(curve_names, file_names):
     file_data[name] = read_data(file_name)
 
-# Строим график
 plot_data(file_data)

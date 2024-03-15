@@ -192,6 +192,68 @@ double* TestPyramidSort(const int from, const int to, const int step,
     return times;
 }
 
+// -------------------------------------------------------------------------
+
+double* TestIntroSortCoeff(const size_t test_size, const char* src_path,
+                           const char* dest_path, void sort(int*, size_t, const int), int C_min, int C_max)
+{
+    assert(src_path);
+    assert(dest_path);
+    assert(sort);
+
+    FILE* fp = fopen(dest_path, "w");
+    if (!fp)
+    {
+        printf("CAN NOT OPEN \"%s\"\n", dest_path);
+        abort();
+    }
+
+    size_t test_amt = C_max - C_min;
+
+    double* times = (double*) calloc(test_amt, sizeof(double));
+    size_t  test_index = 0;
+
+    assert(times);
+
+    for (size_t C = C_min; C <= C_max; C++)
+    {
+        #ifdef SHOW_PROGRESS
+            printf("[%zu]\n", C);
+        #endif
+
+        clock_t duration = 0;
+
+        for (size_t i = 1; i <= K; i++)
+        {
+            char input[MAX_FILE_NAME] = {};
+            snprintf(input, MAX_FILE_NAME, "%s%zu_%zu.in", src_path, test_size, i);      // creating array file name
+
+            int* arr = GetArray(input);
+
+            clock_t start = clock();
+            sort(arr, test_size, C);
+            clock_t end   = clock();
+
+            char ans[MAX_FILE_NAME] = {};
+            snprintf(ans, MAX_FILE_NAME, "%s%zu_%zu.out", src_path, test_size, i);       // creating answer file name
+
+            ValidateArray(ans, arr, test_size);
+
+            duration += end - start;
+        }
+
+        double avg_time = ((double) duration) / (CLOCKS_PER_SEC * K);
+
+        fprintf(fp, "%zu %.7lf\n", C, avg_time);
+
+        times[test_index++] = avg_time;
+    }
+
+    fclose(fp);
+
+    return times;
+}
+
 
 
 
