@@ -62,12 +62,12 @@ double GetPushTime(const int push_amt)
 
     for (size_t i = 0; i < TEST_AMT; i++)
     {
-        struct Stack* st = stack_ctr(MIN_CAPACITY);
+        struct Stack* st = stack_ctr(MIN_CAPACITY, sizeof(int));
 
         clock_t start = clock();
 
         for (size_t j = 0; j < push_amt; j++)
-            push(st, PUSHING_DATA);
+            push(st, &PUSHING_DATA);
 
         clock_t end   = clock();
 

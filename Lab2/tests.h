@@ -3,8 +3,8 @@
 
 // comment including file to disable this stack type
 
-// #include <list_stack.h>
-#include <arr_stack.h>
+#include <list/list_stack.h>
+//#include <array/arr_stack.h>
 
 double first_test();
 void   RunFirstAlgo(struct Stack* st);

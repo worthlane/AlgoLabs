@@ -15,7 +15,7 @@ double first_test()
 
     for (size_t i = 0; i < TEST_AMT; i++)
     {
-         struct Stack* st = stack_ctr(MIN_CAPACITY);
+         struct Stack* st = stack_ctr(MIN_CAPACITY, sizeof(int));
 
         clock_t start = clock();
         RunFirstAlgo(st);
@@ -37,7 +37,7 @@ void RunFirstAlgo(struct Stack* st)
 
     for (int i = 0; i < 1000000; i++)           // pushing 10^6 elems in stack
     {
-        push(st, PUSHING_DATA);
+        push(st, &PUSHING_DATA);
     }
 
     while (st->size > 100000)                   // doing iterations while size > 100000
@@ -48,7 +48,7 @@ void RunFirstAlgo(struct Stack* st)
             pop(st);
 
         for (int i = 0; i < size / 4; i++)
-            push(st, PUSHING_DATA);
+            push(st, &PUSHING_DATA);
     }
 }
 
@@ -60,7 +60,7 @@ double second_test()
 
     for (size_t i = 0; i < TEST_AMT; i++)
     {
-         struct Stack* st = stack_ctr(MIN_CAPACITY);
+         struct Stack* st = stack_ctr(MIN_CAPACITY, sizeof(int));
 
         clock_t start = clock();
         RunSecondAlgo(st);
@@ -81,7 +81,7 @@ void RunSecondAlgo(struct Stack* st)
     assert(st);
 
     for (int i = 0; i < 1000000; i++)               // pushing 10^6 elems in stack
-        push(st, PUSHING_DATA);
+        push(st, &PUSHING_DATA);
 
     for (int i = 0; i < 100; i++)                   // for 100 times pop and push 10000 elements from stack
     {
@@ -89,7 +89,7 @@ void RunSecondAlgo(struct Stack* st)
             pop(st);
 
         for (int j = 0; j < 10000; j++)
-            push(st, PUSHING_DATA);
+            push(st, &PUSHING_DATA);
     }
 
     while (st->size > 100000)                       // do iterations while size > 10^5
@@ -100,7 +100,7 @@ void RunSecondAlgo(struct Stack* st)
             pop(st);
 
         for (int i = 0; i < size / 4; i++)
-            push(st, PUSHING_DATA);
+            push(st, &PUSHING_DATA);
     }
 
     for (int i = 0; i < 100; i++)                   // for 100 times pop and push 10000 elements from stack
@@ -109,7 +109,7 @@ void RunSecondAlgo(struct Stack* st)
             pop(st);
 
         for (int j = 0; j < 10000; j++)
-            push(st, PUSHING_DATA);
+            push(st, &PUSHING_DATA);
     }
 }
 
@@ -123,10 +123,10 @@ double third_test()
 
     for (size_t i = 0; i < TEST_AMT; i++)
     {
-        struct Stack* st = stack_ctr(MIN_CAPACITY);
+        struct Stack* st = stack_ctr(MIN_CAPACITY, sizeof(int));
 
         for (int i = 0; i < 1000000; i++)               // pushing 10^6 elems in stack
-            push(st, PUSHING_DATA);
+            push(st, &PUSHING_DATA);
 
         clock_t start = clock();
         RunThirdAlgo(st);
@@ -150,7 +150,7 @@ void RunThirdAlgo(struct Stack* st)
     {
         int num = (rand() % 2) + 1;
         if (num == 1)                               // push if generated 1
-            push(st, PUSHING_DATA);
+            push(st, &PUSHING_DATA);
         else                                        // pop if generated 2
             pop(st);
     }
