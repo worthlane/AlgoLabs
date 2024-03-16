@@ -133,6 +133,7 @@ int pop(struct Stack* st)
     //   push after that pop will also cause realloc (size == capacity)
     //   so, let's divide by 4, to avoid two reallocs
     //   In this case, the amortization cost of each operation will be O(1).
+    //   
 
     if (st->size <= st->capacity / 4)
     {
