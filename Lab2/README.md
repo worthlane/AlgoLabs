@@ -31,6 +31,7 @@ $$a_i = t_i + \phi_2(cap, size + 1) - \phi_2(cap, size) = 1 + (\frac{1}{2} cap -
 - При добавлении элемента $\alpha$ переходит из $[\frac{1}{4}; \frac{1}{2})$ в $[\frac{1}{2}; 1]$:
 
 $$a_i = t_i + \phi_1(cap, size + 1) - \phi_2(cap, size) = 1 + (2 \cdot (size + 1) - cap) - (\frac{1}{2} cap - size) = 3 + 3 \cdot size - \frac{3}{2} cap;$$
+
 $$3 + 3 \cdot size - \frac{3}{2} cap = 3 + 3 \cdot \alpha \cdot cap - \frac{3}{2} cap < 3 + \frac{3}{2} cap - \frac{3}{2} cap = 3.$$
 
 
@@ -53,7 +54,6 @@ $$a_i = t_i + \phi_1(cap, size - 1) - \phi_1(cap, size) = 1 + (2 \cdot (size - 1
 - При удалении элемента $\alpha$ переходит из $\alpha$ переходит из $[\frac{1}{2}; 1]$ в $[\frac{1}{4}; \frac{1}{2})$:
 
 $$a_i = t_i + \phi_2(cap, size - 1) - \phi_1(cap, size) = 1 + (\frac{1}{2} cap - (size - 1)) - (2 \cdot size - cap) = 2 - 3 \cdot size + \frac{3}{2} cap;$$
-
 
 $$2 - 3 \cdot size + \frac{3}{2} cap = 2 - 3 \cdot \alpha \cdot cap + \frac{3}{2} cap < 2 - \frac{3}{2} cap + \frac{3}{2} cap = 2.$$
 
