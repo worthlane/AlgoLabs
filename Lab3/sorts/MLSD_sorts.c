@@ -95,6 +95,7 @@ void MSD_sort(int* array, size_t N)
 	assert(array);
 
 	int* temp = (int*) calloc(N, sizeof(int));
+    assert(temp);
 
 	RecursiveMSD(array, temp, 0, N, 3);
 

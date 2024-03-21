@@ -22,6 +22,7 @@ static void Merge(int* array, const int left, const int mid, const int right)
 	int ptr2 = 0;
 
 	int* ans = (int*) calloc(right - left, sizeof(int));
+    assert(ans);
 
 	while ((left + ptr1 < mid) && (mid + ptr2 < right))
 			// Repeat while left array and right array still have numbers

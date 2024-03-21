@@ -55,26 +55,6 @@ static void TestQuickPartitions(const int from, const int to, const int step,
 
 int main(const int argc, const char* argv[])
 {
-    srand(clock());
-
-    /*double* times = TestIntroSortCoeff(1000000, "big_tests/",
-                                       "7_point_results/OptimalIntroCoef.txt", TestCoefIntro_sort, 0, (int) log(1000000));
-
-    free(times);*/
-
-    /*double* times = TestSort(0, 1000000, 10000, "big_tests/",
-                            "results/7_point_results/Introtest_sort.txt", OptimalIntro_sort);
-
-    free(times);*/
-
-    /*int array[20] = {342, 21, 3532, 435, 2342, 324, 1231, 453, 876, 234, 3242, 465, 12, 2, 664, 576, 898, 123123, 302, 4363};
-
-    OneBranchHoareQuick_sort(array, 20);
-
-    for(int i = 0; i < 20; i++)
-    {
-        printf("%d ", array[i]);
-    }*/
 
     GetNinethPointData();
 
@@ -216,6 +196,7 @@ static void TestQuickPartitions(const int from, const int to, const int step,
 
 void GetFivthPointData()
 {
+    srand(time(NULL) * clock());
     double* times = NULL;
 
     times = TestSort(BIG_TESTS_FROM, BIG_TESTS_TO, BIG_TESTS_STEP, BIG_TESTS_PATH,
