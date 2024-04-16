@@ -5,7 +5,7 @@
 #include <string.h>
 
 static inline void GetArray(int* array, const int size);
-static inline void PrintArray(int* array, const int size);
+static inline void PrintArray(const int* array, const int size);
 
 void QSort(int* array, const size_t left, const size_t right);
 int Partition(int* array, int l, int r);
@@ -17,9 +17,10 @@ void Swap(int* num1, int* num2);
 int main()
 {
 	size_t N = 0;
-	scanf("%d", &N);
+	assert(scanf("%d", &N));
 
 	int* array = (int*) calloc(N, sizeof(int));
+	assert(array);
 
 	GetArray(array, N);
 
@@ -39,7 +40,7 @@ static inline void GetArray(int* array, const int size)
 	for (int i = 0; i < size; i++)
 	{
 		int number = 0;
-		scanf("%d", &number);
+		assert(scanf("%d", &number));
 
 		array[i] = number;
 	}
@@ -47,7 +48,7 @@ static inline void GetArray(int* array, const int size)
 
 // ---------------------------------------------------------------------
 
-static inline void PrintArray(int* array, const int size)
+static inline void PrintArray(const int* array, const int size)
 {
 	assert(array);
 
