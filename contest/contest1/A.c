@@ -47,11 +47,11 @@ static const          size_t MIN_CAPACITY = 16;
 static const          size_t MAX_CMD_LEN  = 16;
 
 int  GetCommand(const char* cmd);
-void DoCommand(struct Stack_t* dq, int cmd);
+void DoCommand(struct Stack_t* dq, const int cmd);
 
-void        StackCtor(struct Stack_t* stk, size_t capacity);
+void        StackCtor(struct Stack_t* stk, const size_t capacity);
 void        StackDtor(struct Stack_t* stk);
-void        StackPush(struct Stack_t* stk, int value);
+void        StackPush(struct Stack_t* stk, const int value);
 void        StackRealloc(struct Stack_t* stk, size_t new_capacity);
 void        StackClear(struct Stack_t* stk);
 int    StackPop(struct Stack_t* stk);
@@ -113,7 +113,7 @@ int GetCommand(const char* cmd)
 
 // ---------------------------------------------------------------------
 
-void DoCommand(struct Stack_t* stk, int cmd)
+void DoCommand(struct Stack_t* stk, const int cmd)
 {
 	switch (cmd)
 	{
@@ -163,7 +163,7 @@ void DoCommand(struct Stack_t* stk, int cmd)
 
 // ---------------------------------------------------------------------
 
-void StackCtor(struct Stack_t* stk, size_t capacity)
+void StackCtor(struct Stack_t* stk, const size_t capacity)
 {
 	assert(stk);
 
@@ -195,7 +195,7 @@ void StackDtor(struct Stack_t* stk)
 
 //-----------------------------------------------------------------------------------------------------
 
-void StackPush(struct Stack_t* stk, int value)
+void StackPush(struct Stack_t* stk, const int value)
 {
 	assert(stk);
 	assert(stk->data);
@@ -246,11 +246,15 @@ int StackPop(struct Stack_t* stk)
 	if (stk->size == 0)
 		return RET_FAILURE;
 
-	int last_elem = (stk->data)[--(stk->size)].data;
-	(stk->data)[(stk->size)].data = 0;
-	(stk->data)[(stk->size)].min  = 0;
+	struct Elem_t* data_arr = stk->data;
+	size_t         stk_size = stk->size;
 
-	if (stk->size <= stk->capacity / 4)
+	int last_elem = data_arr[--(stk->size)].data;
+
+	data_arr[stk_size].data = 0;
+	data_arr[stk_size].min  = 0;
+
+	if (stk_size <= stk->capacity / 4)
 		StackRealloc(stk, stk->capacity / 4);
 
 	return last_elem;
@@ -329,7 +333,7 @@ void QueueDtor(struct Queue_t* dq)
 
 //-----------------------------------------------------------------------------------------------------
 
-int Min(int a, int b)
+int Min(const int a, const int b)
 {
 	if (a < b)
 		return a;
