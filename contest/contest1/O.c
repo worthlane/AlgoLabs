@@ -70,7 +70,7 @@ int main()
 	for (int order = 1; order <= q; order++)
 	{
 		char cmd[MAX_CMD_LEN] = {};
-		assert(scanf("%19s", cmd));
+		assert(scanf("%15s", cmd));
 
 		int cmd_id = GetCommand(cmd);
 
@@ -158,6 +158,7 @@ void HeapCtor(struct MinHeap* heap, const size_t capacity)
 void HeapDtor(struct MinHeap* heap)
 {
 	assert(heap);
+	assert(heap->array);
 
 	free(heap->array);
 }
@@ -167,6 +168,7 @@ void HeapDtor(struct MinHeap* heap)
 void HeapInsert(struct MinHeap* heap, const long int val, const int order)
 {
 	assert(heap);
+	assert(heap->array);
 
 	if (heap->capacity == heap->size)
 		HeapRealloc(heap, 2 * heap->capacity);
@@ -182,6 +184,7 @@ void HeapInsert(struct MinHeap* heap, const long int val, const int order)
 void HeapRealloc(struct MinHeap* heap, size_t new_capacity)
 {
 	assert(heap);
+	assert(heap->array);
 
 	if (new_capacity <= MIN_CAPACITY)
 		new_capacity = MIN_CAPACITY;
@@ -205,6 +208,7 @@ void HeapRealloc(struct MinHeap* heap, size_t new_capacity)
 void HeapExtractMin(struct MinHeap* heap)
 {
 	assert(heap);
+	assert(heap->array);
 
 	Swap(&heap->array[0], &heap->array[heap->size - 1]);
 	heap->size--;
@@ -220,6 +224,7 @@ void HeapExtractMin(struct MinHeap* heap)
 void HeapDecrease(struct MinHeap* heap, const int order, const int delta)
 {
 	assert(heap);
+	assert(heap->array);
 
 	int index = -1;
 
@@ -261,6 +266,7 @@ size_t GetRightChild(const size_t index)
 void SiftUp(struct MinHeap* heap, size_t index)
 {
 	assert(heap);
+	assert(heap->array);
 
 	while (index != 0)
 	{
@@ -305,6 +311,7 @@ void SiftDown(struct MinHeap* heap, size_t index)
 long int HeapGetMin(struct MinHeap* heap)
 {
 	assert(heap);
+	assert(heap->array);
 
 	return heap->array[0].data;
 }
