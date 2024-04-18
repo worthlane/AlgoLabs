@@ -64,16 +64,16 @@ void Shell_sort(int* arr, const size_t n)
 {
     assert(arr);
 
-    int step = 1;
+    size_t step = 1;
 
     while (step <= n / 9)
         step = step * 3 + 1;
 
     for (; step > 0; step /= 3)
     {
-        for (int i = step; i < n; i += step)
+        for (size_t i = step; i < n; i += step)
         {
-            int j   = i;
+            size_t j   = i;
             int key = arr[i];
 
             for (; j >= step && arr[j - step] > key; j -= step)

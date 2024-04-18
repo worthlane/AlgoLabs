@@ -32,18 +32,18 @@ void LSD_sort(int* array, const size_t N)
     int* temp = (int*) calloc(N, sizeof(int));
 	assert(temp);
 
-	for (int byte = 0; byte < 4; byte++)
+	for (size_t byte = 0; byte < 4; byte++)
 	{
 		unsigned int pref_cnt[MAX_AMT] = {};
 		memset(pref_cnt, 0, sizeof(pref_cnt));
 
-		for (int i = 0; i < N; i++)
+		for (size_t i = 0; i < N; i++)
 			pref_cnt[GetByte(array[i], byte)]++;
 
-		for (int i = 1; i < MAX_AMT; i++)
+		for (size_t i = 1; i < MAX_AMT; i++)
 			pref_cnt[i] += pref_cnt[i - 1];
 
-		for (int i = N - 1; i >= 0; i--)
+		for (size_t i = N - 1; i >= 0; i--)
 			temp[--pref_cnt[GetByte(array[i], byte)]] = array[i];
 
 		memcpy(array, temp, sizeof(int) * N);
@@ -65,13 +65,13 @@ static void RecursiveMSD(int* array, int* temp, const int l, const int r, const 
 
 	unsigned int pref_cnt[MAX_AMT] = {};
 
-	for (int i = l; i < r; i++)
+	for (size_t i = l; i < r; i++)
 		pref_cnt[GetByte(array[i], byte)]++;
 
-	for (int i = 1; i < MAX_AMT; i++)
+	for (size_t i = 1; i < MAX_AMT; i++)
 		pref_cnt[i] += pref_cnt[i - 1];
 
-	for (int i = l; i < r; i++)
+	for (size_t i = l; i < r; i++)
 	{
 		unsigned int byte_val = GetByte(array[i], byte);
 
@@ -82,7 +82,7 @@ static void RecursiveMSD(int* array, int* temp, const int l, const int r, const 
 
 	memcpy(array + l, temp + l, sizeof(int) * (size));
 
-	for (int i = 0; i < MAX_AMT - 1; i++)
+	for (size_t i = 0; i < MAX_AMT - 1; i++)
 		RecursiveMSD(array, temp, l + pref_cnt[i], l + pref_cnt[i + 1], byte - 1);
 
 	RecursiveMSD(array, temp, l + pref_cnt[MAX_AMT - 1], r, byte - 1);

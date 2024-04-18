@@ -53,7 +53,7 @@ static void Merge(int* array, const int left, const int mid, const int right)
 
 	assert(ptr1 + ptr2 <= right - left);
 
-	for (int i = 0; i < ptr1 + ptr2; i++)           // Copy "ans" array to the main array
+	for (size_t i = 0; i < ptr1 + ptr2; i++)           // Copy "ans" array to the main array
 		array[left + i] = ans[i];
 
 	free(ans);
@@ -80,9 +80,9 @@ void IterativeMerge_sort(int* array, const size_t n)
     if (n == 0)
         return;
 
-	for (int i = 1; i < n; i *= 2)
+	for (size_t i = 1; i < n; i *= 2)
 	{
-		for (int j = 0; j < n - i; j += 2 * i)
+		for (size_t j = 0; j < n - i; j += 2 * i)
 		{
 			int r = Min(j + 2 * i, n);
 			int l = j;

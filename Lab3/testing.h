@@ -37,7 +37,7 @@ int* GetArray(const char* input_file)
 
 // -------------------------------------------------------------------------
 
-void ValidateArray(const char* answer_file, int* arr, size_t array_size)
+void ValidateArray(const char* answer_file, int* arr, const size_t array_size)
 {
     assert(answer_file);
     assert(arr);

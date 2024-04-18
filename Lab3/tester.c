@@ -96,7 +96,7 @@ void GetFirstPointData()
 
 void GetSecondPointData()
 {
-    for (int k = 2; k < 11; k++)
+    for (size_t k = 2; k < 11; k++)
     {
         char dest_path[MAX_PATH_LEN] = "";
         snprintf(dest_path, MAX_PATH_LEN, "results/2_point_results/%d_Pyramid_sort.txt", k);

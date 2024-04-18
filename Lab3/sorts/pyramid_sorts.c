@@ -39,7 +39,7 @@ static void SiftDown(int* heap_array, size_t index, const size_t size, const int
 		int max_child = index * k + 1;
 
 
-        for (int i = 2; i <= k; i++)                            // index with maximum value
+        for (size_t i = 2; i <= k; i++)                            // index with maximum value
         {
             if ((index * k + i) < size && heap_array[index * k + i] > heap_array[max_child])
                 max_child = index * k + i;
@@ -70,12 +70,12 @@ void Pyramid_sort(int* arr, const size_t n, const int k)
 {
     assert(arr);
 
-    for (int i = n / k; i >= 0; i--)
+    for (size_t i = n / k; i >= 0; i--)
     {
 		SiftDown(arr, i, n, k);
     }
 
-    for (int i = n; i > 0; i--)
+    for (size_t i = n; i > 0; i--)
     {
         HeapExtractMax(arr, i, k);
     }

@@ -79,7 +79,7 @@ static void LomutoPartition(int* array, int l, int r, int* mid1, int* mid2)
 
 	int i = l;
 
-    for (int j = l; j <= r; j++)
+    for (size_t j = l; j <= r; j++)
     {
         if (array[j] < pivot)
             Swap(&array[i++], &array[j]);
