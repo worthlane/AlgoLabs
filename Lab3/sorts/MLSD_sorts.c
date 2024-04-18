@@ -4,15 +4,15 @@
 
 #include "MLSD_sorts.h"
 
-static unsigned int GetByte(unsigned int num, int byte_num);
-static void 		RecursiveMSD(int* array, int* temp, int l, int r, int byte);
+static unsigned int GetByte(const unsigned int num, const int byte_num);
+static void 		RecursiveMSD(int* array, int* temp, const int l, const int r, const int byte);
 
 
 static const size_t MAX_AMT = 256;   // max array size
 
 // ------------------------------------------------------------------------------
 
-static unsigned int GetByte(unsigned int num, int byte_num)
+static unsigned int GetByte(const unsigned int num, const int byte_num)
 {
 	unsigned int mask = 0xff;
 
@@ -25,7 +25,7 @@ static unsigned int GetByte(unsigned int num, int byte_num)
 
 // ------------------------------------------------------------------------------
 
-void LSD_sort(int* array, size_t N)
+void LSD_sort(int* array, const size_t N)
 {
 	assert(array);
 
@@ -53,7 +53,7 @@ void LSD_sort(int* array, size_t N)
 
 // ------------------------------------------------------------------------------
 
-static void RecursiveMSD(int* array, int* temp, int l, int r, int byte)
+static void RecursiveMSD(int* array, int* temp, const int l, const int r, const int byte)
 {
 	assert(array);
 	assert(temp);
@@ -90,7 +90,7 @@ static void RecursiveMSD(int* array, int* temp, int l, int r, int byte)
 
 // ------------------------------------------------------------------------------
 
-void MSD_sort(int* array, size_t N)
+void MSD_sort(int* array, const size_t N)
 {
 	assert(array);
 

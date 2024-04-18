@@ -6,7 +6,7 @@
 
 //---------------------------------------------------
 
-void Insertion_sort(int* arr, size_t n)
+void Insertion_sort(int* arr, const size_t n)
 {
     assert(arr);
 
@@ -25,7 +25,7 @@ void Insertion_sort(int* arr, size_t n)
 
 //---------------------------------------------------
 
-void Bubble_sort(int* arr, size_t n)
+void Bubble_sort(int* arr, const size_t n)
 {
     assert(arr);
 
@@ -44,7 +44,7 @@ void Bubble_sort(int* arr, size_t n)
 
 //---------------------------------------------------
 
-void Selection_sort(int* arr, size_t n)
+void Selection_sort(int* arr, const size_t n)
 {
     assert(arr);
 
@@ -60,7 +60,7 @@ void Selection_sort(int* arr, size_t n)
 
 //---------------------------------------------------
 
-void Shell_sort(int* arr, size_t n)
+void Shell_sort(int* arr, const size_t n)
 {
     assert(arr);
 

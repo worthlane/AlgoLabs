@@ -3,7 +3,7 @@
 
 #include "merge_sorts.h"
 
-static int 	Min(int a, int b);
+static int 	Min(const int a, const int b);
 static void Merge(int* array, const int left, const int mid, const int right);
 static void RecursiveMergeSort(int* array, const int left, const int right);
 
@@ -75,7 +75,7 @@ static void RecursiveMergeSort(int* array, const int left, const int right)
 
 // ---------------------------------------------------------------------
 
-void IterativeMerge_sort(int* array, size_t n)
+void IterativeMerge_sort(int* array, const size_t n)
 {
     if (n == 0)
         return;
@@ -97,7 +97,7 @@ void IterativeMerge_sort(int* array, size_t n)
 
 // ---------------------------------------------------------------------
 
-void RecursiveMerge_sort(int* arr, size_t n)
+void RecursiveMerge_sort(int* arr, const size_t n)
 {
     RecursiveMergeSort(arr, 0, n);
 }

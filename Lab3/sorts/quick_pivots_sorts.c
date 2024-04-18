@@ -5,20 +5,20 @@
 
 #include "common.h"
 
-static int PivotsPartition(int* array, int l, int r, int take_pivot(int*, int, int));
+static int PivotsPartition(int* array, const int l, const int r, int take_pivot(int*, const int, const int));
 
-static void PivotsQSort(int* array, const size_t left, const size_t right, int take_pivot(int*, int, int));
+static void PivotsQSort(int* array, const size_t left, const size_t right, int take_pivot(int*, const int, const int));
 
-static int CentralPivot(int* array, int l, int r);
-static int MedianThreePivot(int* array, int l, int r);
-static int RandPivot(int* array, int l, int r);
-static int RandMedianPivot(int* array, int l, int r);
+static int CentralPivot(int* array, const int l, const int r);
+static int MedianThreePivot(int* array, const int l, const int r);
+static int RandPivot(int* array, const int l, const int r);
+static int RandMedianPivot(int* array, const int l, const int r);
 
-static int Median(int* array, int a, int b, int c);
+static int Median(int* array, const int a, const int b, const int c);
 
 // USING HOARE PARTITION AS DEFAULT (BECAUSE IT IS FASTEST IN 4th POINT)
 
-static int Median(int* array, int a, int b, int c)
+static int Median(int* array, const int a, const int b, const int c)
 {
     assert(array);
 
@@ -36,7 +36,7 @@ static int Median(int* array, int a, int b, int c)
 
 // ---------------------------------------------------------------------
 
-static int PivotsPartition(int* array, int l, int r, int take_pivot(int*, int, int))
+static int PivotsPartition(int* array, const int l, const int r, int take_pivot(int*, const int, const int))
 {
 	int pivot   = take_pivot(array, l, r);
 	int i = l;
@@ -57,7 +57,7 @@ static int PivotsPartition(int* array, int l, int r, int take_pivot(int*, int, i
 
 //-------------------------------------------------------------------------------------------
 
-static void PivotsQSort(int* array, const size_t left, const size_t right, int take_pivot(int*, int, int))
+static void PivotsQSort(int* array, const size_t left, const size_t right, int take_pivot(int*, const int, const int))
 {
 	assert(array);
 
@@ -80,7 +80,7 @@ static void PivotsQSort(int* array, const size_t left, const size_t right, int t
 
 //-------------------------------------------------------------------------------------------
 
-static int CentralPivot(int* array, int l, int r)
+static int CentralPivot(int* array, const int l, const int r)
 {
     assert(array);
 
@@ -90,7 +90,7 @@ static int CentralPivot(int* array, int l, int r)
 
 //-------------------------------------------------------------------------------------------
 
-static int MedianThreePivot(int* array, int l, int r)
+static int MedianThreePivot(int* array, const int l, const int r)
 {
     assert(array);
 
@@ -103,7 +103,7 @@ static int MedianThreePivot(int* array, int l, int r)
 
 //-------------------------------------------------------------------------------------------
 
-static int RandPivot(int* array, int l, int r)
+static int RandPivot(int* array, const int l, const int r)
 {
     assert(array);
 
@@ -114,7 +114,7 @@ static int RandPivot(int* array, int l, int r)
 
 //-------------------------------------------------------------------------------------------
 
-static int RandMedianPivot(int* array, int l, int r)
+static int RandMedianPivot(int* array, const int l, const int r)
 {
     assert(array);
 
@@ -129,7 +129,7 @@ static int RandMedianPivot(int* array, int l, int r)
 
 //-------------------------------------------------------------------------------------------
 
-void CentralPivot_sort(int* arr, size_t n)
+void CentralPivot_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;
@@ -139,7 +139,7 @@ void CentralPivot_sort(int* arr, size_t n)
 
 //-------------------------------------------------------------------------------------------
 
-void MedianThreePivot_sort(int* arr, size_t n)
+void MedianThreePivot_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;
@@ -149,7 +149,7 @@ void MedianThreePivot_sort(int* arr, size_t n)
 
 //-------------------------------------------------------------------------------------------
 
-void RandPivot_sort(int* arr, size_t n)
+void RandPivot_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;
@@ -159,7 +159,7 @@ void RandPivot_sort(int* arr, size_t n)
 
 //-------------------------------------------------------------------------------------------
 
-void RandMedianPivot_sort(int* arr, size_t n)
+void RandMedianPivot_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;

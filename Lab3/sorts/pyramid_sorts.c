@@ -4,13 +4,13 @@
 #include "common.h"
 #include "pyramid_sorts.h"
 
-static void SiftUp(int* heap_array, size_t index, size_t n, const int k);
-static void SiftDown(int* heap_array, size_t index, size_t size, const int k);
-static void HeapExtractMax(int* heap_array, size_t size, const int k);
+static void SiftUp(int* heap_array, size_t index, const size_t n, const int k);
+static void SiftDown(int* heap_array, size_t index, const size_t size, const int k);
+static void HeapExtractMax(int* heap_array, const size_t size, const int k);
 
 // ---------------------------------------------------------------------
 
-static void SiftUp(int* heap_array, size_t index, size_t n, const int k)
+static void SiftUp(int* heap_array, size_t index, const size_t n, const int k)
 {
 	assert(heap_array);
 
@@ -30,7 +30,7 @@ static void SiftUp(int* heap_array, size_t index, size_t n, const int k)
 
 // ---------------------------------------------------------------------
 
-static void SiftDown(int* heap_array, size_t index, size_t size, const int k)
+static void SiftDown(int* heap_array, size_t index, const size_t size, const int k)
 {
 	assert(heap_array);
 
@@ -55,7 +55,7 @@ static void SiftDown(int* heap_array, size_t index, size_t size, const int k)
 
 // ---------------------------------------------------------------------
 
-static void HeapExtractMax(int* heap_array, size_t size, const int k)
+static void HeapExtractMax(int* heap_array, const size_t size, const int k)
 {
 	assert(heap_array);
 
@@ -66,7 +66,7 @@ static void HeapExtractMax(int* heap_array, size_t size, const int k)
 
 // ---------------------------------------------------------------------
 
-void Pyramid_sort(int* arr, size_t n, const int k)
+void Pyramid_sort(int* arr, const size_t n, const int k)
 {
     assert(arr);
 

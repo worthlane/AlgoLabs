@@ -9,13 +9,13 @@
 
 #include "intro_sorts.h"
 
-static int Partition(int* array, int l, int r);
+static int Partition(int* array, const int l, const int r);
 static void IntroQuickSort(int* array, const size_t left, const size_t right, const size_t depth);
 
 
 // ---------------------------------------------------------------------
 
-static int Partition(int* array, int l, int r)
+static int Partition(int* array, const int l, const int r)
 {
 	int piv_idx = l + (r - l) / 2;
 	int pivot   = array[piv_idx];                   // Central pivot strategy
@@ -59,7 +59,7 @@ static void IntroQuickSort(int* array, const size_t left, const size_t right, co
 
 //-------------------------------------------------------------------------------------------
 
-void TestCoefIntro_sort(int* arr, size_t n, const int C)
+void TestCoefIntro_sort(int* arr, const size_t n, const int C)
 {
     if (n == 0)
         return;
@@ -71,7 +71,7 @@ void TestCoefIntro_sort(int* arr, size_t n, const int C)
 
 //-------------------------------------------------------------------------------------------
 
-void OptimalIntro_sort(int* arr, size_t n)
+void OptimalIntro_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;

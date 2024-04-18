@@ -12,7 +12,7 @@ static void LomutoPartition(int* array, int l, int r, int* mid1, int* mid2);
 static void OneBranchQSort(int* array, size_t left, size_t right,
                             void partition(int* array, int l, int r, int* eq_from, int* eq_to));
 
-static void QSort(int* array, const size_t left, const size_t right,
+static void QSort(int* array, size_t left, size_t right,
                     void partition(int* array, int l, int r, int* eq_from, int* eq_to));
 
 static int Comparator(const void* a, const void* b)
@@ -121,7 +121,7 @@ static void OneBranchQSort(int* array, size_t left, size_t right,
 
 //-------------------------------------------------------------------------------------------
 
-static void QSort(int* array, const size_t left, const size_t right,
+static void QSort(int* array, size_t left, size_t right,
                     void partition(int* array, int l, int r, int* eq_from, int* eq_to))
 {
 	assert(array);
@@ -148,7 +148,7 @@ static void QSort(int* array, const size_t left, const size_t right,
 
 //-------------------------------------------------------------------------------------------
 
-void HoareQuick_sort(int* arr, size_t n)
+void HoareQuick_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;
@@ -158,7 +158,7 @@ void HoareQuick_sort(int* arr, size_t n)
 
 //-------------------------------------------------------------------------------------------
 
-void LomutoQuick_sort(int* arr, size_t n)
+void LomutoQuick_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;
@@ -168,7 +168,7 @@ void LomutoQuick_sort(int* arr, size_t n)
 
 //-------------------------------------------------------------------------------------------
 
-void FatQuick_sort(int* arr, size_t n)
+void FatQuick_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;
@@ -178,7 +178,7 @@ void FatQuick_sort(int* arr, size_t n)
 
 //-------------------------------------------------------------------------------------------
 
-void OneBranchHoareQuick_sort(int* arr, size_t n)
+void OneBranchHoareQuick_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;
@@ -188,7 +188,7 @@ void OneBranchHoareQuick_sort(int* arr, size_t n)
 
 //-------------------------------------------------------------------------------------------
 
-void OneBranchLomutoQuick_sort(int* arr, size_t n)
+void OneBranchLomutoQuick_sort(int* arr, const size_t n)
 {
     if (n == 0)
         return;
@@ -198,7 +198,7 @@ void OneBranchLomutoQuick_sort(int* arr, size_t n)
 
 // -----------------------------------------------------------------
 
-void StdQuick_sort(int* arr, size_t n)
+void StdQuick_sort(int* arr, const size_t n)
 {
     qsort(arr, n, sizeof(int), Comparator);
 }
