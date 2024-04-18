@@ -52,13 +52,17 @@ enum Commands
 int  GetCommand(const char* cmd);
 void DoCommand(struct MinHeap* heap, int cmd, const int order);
 
+size_t GetParent(const size_t index);
+size_t GetLeftChild(const size_t index);
+size_t GetRightChild(const size_t index);
+
 
 // =====================================================================
 
 int main()
 {
 	int q = 0;
-	scanf("%d", &q);
+	assert(scanf("%d", &q));
 
 	struct MinHeap heap = {};
 	HeapCtor(&heap, MIN_CAPACITY);
@@ -66,7 +70,7 @@ int main()
 	for (int order = 1; order <= q; order++)
 	{
 		char cmd[MAX_CMD_LEN] = {};
-		scanf("%s", cmd);
+		assert(scanf("%19s", cmd));
 
 		int cmd_id = GetCommand(cmd);
 
@@ -233,13 +237,34 @@ void HeapDecrease(struct MinHeap* heap, const int order, const int delta)
 
 // ---------------------------------------------------------------------
 
+size_t GetParent(const size_t index)
+{
+	return (index - 1) / 2;
+}
+
+// ---------------------------------------------------------------------
+
+size_t GetLeftChild(const size_t index)
+{
+	return 2 * index + 1;
+}
+
+// ---------------------------------------------------------------------
+
+size_t GetRightChild(const size_t index)
+{
+	return 2 * index + 2;
+}
+
+// ---------------------------------------------------------------------
+
 void SiftUp(struct MinHeap* heap, size_t index)
 {
 	assert(heap);
 
 	while (index != 0)
 	{
-		size_t parent = (index - 1) / 2;
+		size_t parent = GetParent(index);
 
 		if (heap->array[parent].data > heap->array[index].data)
 		{
@@ -256,11 +281,12 @@ void SiftUp(struct MinHeap* heap, size_t index)
 void SiftDown(struct MinHeap* heap, size_t index)
 {
 	assert(heap);
+	assert(heap->array);
 
 	while (2 * index + 1 < heap->size)
 	{
-		int left  = 2 * index + 1;
-		int right = 2 * index + 2;
+		int left  = GetLeftChild(index);
+		int right = GetRightChild(index);
 		int j     = left;
 
 		if (right < heap->size && heap->array[left].data > heap->array[right].data)
