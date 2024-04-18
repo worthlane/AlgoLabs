@@ -18,7 +18,7 @@ while [ "$current_size" -le "$to_size" ]; do
 
         ./arrgen $current_size $max > "$output_directory/${current_size}_${k}.in"
 
-        ./arrheap < "$output_directory/${current_size}_${k}.in" > "$output_directory/${current_size}_${k}.out"
+        #./arrheap < "$output_directory/${current_size}_${k}.in" > "$output_directory/${current_size}_${k}.out"
 
     done
 

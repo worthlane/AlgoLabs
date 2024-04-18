@@ -33,20 +33,9 @@ GEN_DIR = tests
 GEN_SRC = arraygen.c
 GEN_OBJ = $(GEN_SRC:%.c=$(OBJECTS_DIR)/%.o)
 
-HEAPARR = arrheap
-HEAPARR_DIR = tests
-HEAPARR_SRC = arrayheapify.c
-HEAPARR_OBJ = $(HEAPARR_SRC:%.c=$(OBJECTS_DIR)/%.o)
-
 
 .PHONY: all
-all: $(EXECUTABLE) $(GEN_DIR)/$(ARR_GEN) $(HEAPARR_DIR)/$(HEAPARR)
-
-$(HEAPARR_DIR)/$(HEAPARR): $(HEAPARR_OBJ) $(HEAPS_OBJ)
-	$(CXX) $^ -o $@ $(CXXFLAGS)
-
-$(OBJECTS_DIR)/%.o : $(HEAPARR_DIR)/%.c
-	$(CXX) -c $^ -o $@ $(CXXFLAGS)
+all: $(EXECUTABLE) $(GEN_DIR)/$(ARR_GEN)
 
 $(GEN_DIR)/$(ARR_GEN): $(GEN_OBJ)
 	$(CXX) $^ -o $@ $(CXXFLAGS)

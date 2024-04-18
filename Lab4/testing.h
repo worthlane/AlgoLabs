@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <time.h>
+#include <stdint.h>
 
 static const size_t K               = 5;
 static const size_t MAX_FILE_NAME   = 64;
@@ -37,35 +38,45 @@ int* GetArray(const char* input_file)
 
 // -------------------------------------------------------------------------
 
-void ValidateArray(const char* answer_file, int* arr, size_t array_size)
+static inline int GetLeftSon(int* arr, size_t size, size_t parent)
 {
-    assert(answer_file);
-    assert(arr);
+    size_t index = 2 * parent + 1;
 
-    FILE* fp = fopen(answer_file, "r");
-    if (!fp)
-    {
-        printf("CAN NOT OPEN \"%s\"\n", answer_file);
-        abort();
-    }
+    if (index >= size)
+        return -2147483647;
+    else
+        return arr[index];
+}
+
+// -------------------------------------------------------------------------
+
+static inline int GetRightSon(int* arr, size_t size, size_t parent)
+{
+    size_t index = 2 * parent + 2;
+
+    if (index >= size)
+        return -2147483647;
+    else
+        return arr[index];
+}
+
+// -------------------------------------------------------------------------
+
+void ValidateArray(int* arr, size_t array_size)
+{
+    assert(arr);
 
     for (size_t i = 0; i < array_size; i++)
     {
-        int num = 0;
-        assert(fscanf(fp, "%d", &num));
+        int left_kid  = GetLeftSon(arr, array_size, i);
+        int right_kid = GetRightSon(arr, array_size, i);
 
-        if (num != arr[i])
+        if (left_kid > arr[i] || right_kid > arr[i])
         {
-            printf("expected: %s\nprinted:\n", answer_file);
-
-            for (size_t j = 0; j < array_size; j++)
-            printf("%d ", arr[j]);
-
+            printf("left kid: %d, right kid %d, parent %d\n", left_kid, right_kid, arr[i]);
             abort();
         }
     }
-
-    fclose(fp);
 }
 
 // -------------------------------------------------------------------------
@@ -110,10 +121,7 @@ double* TestHeapify(const int from, const int to, const int step,
             heapify(arr, size);
             clock_t end   = clock();
 
-            char ans[MAX_FILE_NAME] = {};
-            snprintf(ans, MAX_FILE_NAME, "%s%zu_%zu.out", src_path, size, i);       // creating answer file name
-
-            ValidateArray(ans, arr, size);
+            ValidateArray(arr, size);
 
             duration += end - start;
         }
