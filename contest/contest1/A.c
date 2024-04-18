@@ -63,6 +63,8 @@ void        QueueDtor(struct Queue_t* dq);
 
 int    Min(int a, int b);
 
+void HandleCommands(struct Stack_t* stk);
+
 
 // =====================================================================
 
@@ -72,22 +74,29 @@ int main()
 
 	StackCtor(&stk, MIN_CAPACITY);
 
-	while (true)
-	{
-		char cmd[MAX_CMD_LEN] = {};
-		scanf("%s", cmd);
-
-		int cmd_id = GetCommand(cmd);
-
-		DoCommand(&stk, cmd_id);
-
-		if (cmd_id == EXIT)
-			break;
-	}
+	HandleCommands(&stk);
 
     StackDtor(&stk);
 
 	return 0;
+}
+
+// ---------------------------------------------------------------------
+
+void HandleCommands(struct Stack_t* stk)
+{
+	while (true)
+	{
+		char cmd[MAX_CMD_LEN] = {};
+		assert(scanf("%s", cmd));
+
+		int cmd_id = GetCommand(cmd);
+
+		DoCommand(stk, cmd_id);
+
+		if (cmd_id == EXIT)
+			return;
+	}
 }
 
 // ---------------------------------------------------------------------
