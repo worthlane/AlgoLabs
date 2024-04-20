@@ -34,11 +34,10 @@ static void SiftDown(int* heap_array, size_t index, const size_t size, const int
 {
 	assert(heap_array);
 
-	while (k * index + 1 < size)
+	int max_child = index * k + 1;
+
+	while (max_child < size)
 	{
-		int max_child = index * k + 1;
-
-
         for (size_t i = 2; i <= k; i++)                            // index with maximum value
         {
             if ((index * k + i) < size && heap_array[index * k + i] > heap_array[max_child])
@@ -50,6 +49,8 @@ static void SiftDown(int* heap_array, size_t index, const size_t size, const int
 
 		Swap(&heap_array[index], &heap_array[max_child]);
 		index = max_child;
+
+		max_child  = index * k + 1;
 	}
 }
 
