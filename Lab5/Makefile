@@ -20,13 +20,12 @@ CXXFLAGS += -I $(HOME)
 BUILD_DIR = build/bin
 OBJECTS_DIR = build
 
-#SOURCES = testing.c
+SOURCES = testing.c research_func.c
+OBJECTS = $(SOURCES:%.c=$(OBJECTS_DIR)/%.o)
 
-#OBJECTS = $(SOURCES:%.c=$(OBJECTS_DIR)/%.o)
-
-#HEAPS_DIR = heaps
-#HEAPS_SRC = common.c binheap.c
-#HEAPS_OBJ = $(HEAPS_SRC:%.c=$(OBJECTS_DIR)/%.o)
+TABLE_DIR = hashtable
+TABLE_SRC = hash.c listed_map.c opened_map.c
+TABLE_OBJ = $(TABLE_SRC:%.c=$(OBJECTS_DIR)/%.o)
 
 GEN_DIR = tests
 
@@ -43,7 +42,7 @@ FLOAT_SRC = floatgen.c
 FLOAT_OBJ = $(FLOAT_SRC:%.c=$(OBJECTS_DIR)/%.o)
 
 .PHONY: all
-all: $(GEN_DIR)/$(INT_GEN) $(GEN_DIR)/$(WORD_GEN) $(GEN_DIR)/$(FLOAT_GEN)
+all: $(EXECUTABLE) $(GEN_DIR)/$(INT_GEN) $(GEN_DIR)/$(WORD_GEN) $(GEN_DIR)/$(FLOAT_GEN)
 
 $(GEN_DIR)/$(FLOAT_GEN): $(FLOAT_OBJ)
 	$(CXX) $^ -o $@ $(CXXFLAGS)
@@ -57,14 +56,14 @@ $(GEN_DIR)/$(INT_GEN): $(INT_OBJ)
 $(OBJECTS_DIR)/%.o : $(GEN_DIR)/%.c
 	$(CXX) -c $^ -o $@ $(CXXFLAGS)
 
-#$(EXECUTABLE): $(OBJECTS) $(HEAPS_OBJ)
-#	$(CXX) $^ -o $@ $(CXXFLAGS)
+$(EXECUTABLE): $(OBJECTS) $(TABLE_OBJ)
+	$(CXX) $^ -o $@ $(CXXFLAGS)
 
-#$(OBJECTS_DIR)/%.o : $(HEAPS_DIR)/%.c
-#	$(CXX) -c $^ -o $@ $(CXXFLAGS)
+$(OBJECTS_DIR)/%.o : $(TABLE_DIR)/%.c
+	$(CXX) -c $^ -o $@ $(CXXFLAGS)
 
-#$(OBJECTS_DIR)/%.o : %.c
-#	$(CXX) -c $^ -o $@ $(CXXFLAGS)
+$(OBJECTS_DIR)/%.o : %.c
+	$(CXX) -c $^ -o $@ $(CXXFLAGS)
 
 
 .PHONY: clean makedirs

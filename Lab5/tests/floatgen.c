@@ -16,6 +16,8 @@ int main(const int argc, const char* argv[])
     size_t array_len   = atoi(argv[1]);
     int    border      = atoi(argv[2]);
 
+    printf("%lu\n", array_len);
+
     for (size_t i = 0; i < array_len; i++)
     {
         float non_int_part = (float) rand() / RAND_MAX;

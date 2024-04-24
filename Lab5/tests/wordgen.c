@@ -26,6 +26,8 @@ int main(const int argc, const char* argv[])
     if (min_word < 0)
         min_word = 0;
 
+    printf("%lu\n", array_len);
+
     for (size_t i = 0; i < array_len; i++)
     {
         size_t rand_len = min_word + ((unsigned) rand()) % (max_word - min_word + 1);

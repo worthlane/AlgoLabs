@@ -19,6 +19,8 @@ int main(const int argc, const char* argv[])
     if (max_num < 0)
         max_num = RAND_MAX;
 
+    printf("%lu\n", array_len);
+
     for (size_t i = 0; i < array_len; i++)
     {
         unsigned int rand_num = ((unsigned) rand()) % (max_num + 1);
