@@ -16,27 +16,14 @@ typedef size_t (*address_func)(opened_map_t, const int);
 
 // --------------------------------------------------------------
 
-opened_map_t* OpenedMapCtor(size_t size, address_t address_type)
+opened_map_t* OpenedMapCtor(size_t size, address_t address_type, const double load_factor_resize)
 {
-	static const size_t prime_numbers[]   =
-    {
-        7, 19, 37, 61, 127, 271, 331, 397, 547, 631,
-        919, 1657, 1801, 1951, 2269, 2437, 2791, 3169,
-        3571, 4219, 4447, 5167, 5419, 6211, 7057, 7351, 8269,
-        9241, 10267, 11719, 12097, 13267, 13669, 16651, 19441,
-        19927, 22447, 23497, 24571, 25117, 26227, 27361, 33391, 35317,
-        37633, 43201, 47629, 60493, 63949, 65713, 69313, 73009, 76801,
-        84673, 106033, 108301, 112909, 115249, 196613,
-        393241, 786433, 1572869, 3145739, 6291469, 1000003, 12582917
-    };
-    static const size_t prime_numbers_amt = sizeof(prime_numbers) / sizeof(*prime_numbers);
-
     size_t table_size = 0;
-    for (size_t i = 0; i < prime_numbers_amt; i++)
+    for (size_t i = 0; i < PRIME_NUMBERS_AMT; i++)
     {
-        if (size <= prime_numbers[i])
+        if (size <= PRIME_NUMBERS[i])
         {
-            table_size = prime_numbers[i];
+            table_size = PRIME_NUMBERS[i];
             break;
         }
     }
@@ -53,9 +40,10 @@ opened_map_t* OpenedMapCtor(size_t size, address_t address_type)
     map_elem_t* data = calloc(table_size, sizeof(map_elem_t));
     assert(data);
 
-    table->size = 0;
-    table->cap  = table_size;
-    table->address = address_type;
+    table->size        = 0;
+    table->cap         = table_size;
+    table->address     = address_type;
+    table->load_factor = load_factor_resize;
 
     table->array = data;
 
@@ -78,7 +66,7 @@ static size_t GetLinearAddress(opened_map_t* table, const int key)
 {
     assert(table);
 
-    size_t index = BitHash(key) % (table->cap);
+    size_t index = BitHash(key, table->cap);
 
     do
     {
@@ -101,7 +89,7 @@ static size_t GetQuadraticAddress(opened_map_t* table, const int key)
 {
     assert(table);
 
-    size_t hash = BitHash(key);
+    size_t hash = BitHash(key, table->cap);
     int    i    = 0;
 
     size_t index = hash % table->cap;
@@ -129,7 +117,7 @@ static size_t GetDoubleAddress(opened_map_t* table, const int key)
 {
     assert(table);
 
-    size_t index1 = BitHash(key);
+    size_t index1 = BitHash(key, table->cap);
     size_t index2 = key;
 
     size_t index = (index1 + index2) % table->cap;
@@ -178,6 +166,35 @@ void OpenedMapInsert(opened_map_t* table, int key)
     table->size++;
     table->array[index].data    = key;
     table->array[index].is_full = true;
+}
+
+// --------------------------------------------------------------
+
+static void OpenedMapResize(opened_map_t* table)
+{
+    double cur_load_factor = (double) table->size / (double) table->cap;
+
+    if (cur_load_factor < table->load_factor)
+        return;
+
+    size_t new_table_cap = 0;
+    for (size_t i = 0; i < PRIME_NUMBERS_AMT; i++)
+    {
+        if (table->cap <= PRIME_NUMBERS[i])
+        {
+            table_cap = PRIME_NUMBERS[i];
+            break;
+        }
+    }
+
+    if (new_table_cap == 0)
+    {
+        printf("TOO SMALL TABLE\n");
+        return;
+    }
+
+    // TODO 
+
 }
 
 // --------------------------------------------------------------

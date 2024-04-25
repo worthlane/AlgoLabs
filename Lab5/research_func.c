@@ -46,9 +46,9 @@ static void ResearchIntFuncs()
         unsigned int key = 0;
         fscanf(fp, "%d", &key);
 
-        RemainHashResults[RemainHash(key) % size]++;
-        BitHashResults[BitHash(key) % size]++;
-        KnuthHashResults[KnuthHash(key) % size]++;
+        RemainHashResults[RemainHash(key, size)]++;
+        BitHashResults[BitHash(key, size)]++;
+        KnuthHashResults[KnuthHash(key, size)]++;
     }
 
     DumpResults(RemainHashResults, size, "results/int_hash/RemainHash.txt");
@@ -83,11 +83,11 @@ static void ResearchFloatFuncs()
         float key = 0;
         assert(fscanf(fp, "%f", &key));
 
-        IntBitHashResults[IntBitHash(key) % size]++;
-        FloatBitHashResults[FloatBitHash(key) % size]++;
-        MantissaHashResults[MantissaHash(key) % size]++;
-        ExponentHashResults[ExponentHash(key) % size]++;
-        MantissaMulExponentHashResults[MantissaMulExponentHash(key) % size]++;
+        IntBitHashResults[IntBitHash(key, size)]++;
+        FloatBitHashResults[FloatBitHash(key, size)]++;
+        MantissaHashResults[MantissaHash(key, size)]++;
+        ExponentHashResults[ExponentHash(key, size)]++;
+        MantissaMulExponentHashResults[MantissaMulExponentHash(key, size)]++;
     }
 
     DumpResults(IntBitHashResults, size, "results/float_hash/IntBitHash.txt");
@@ -122,10 +122,10 @@ static void ResearchWordFuncs()
         char key[32] = "";
         assert(fscanf(fp, "%31s", key));
 
-        ASCII_SumHashResults[ASCII_SumHash(key) % size]++;
-        StrLenHashResults[StrLenHash(key) % size]++;
-        PolynomialHashResults[PolynomialHash(key) % size]++;
-        CRC32_HashResults[CRC32_Hash(key) % size]++;
+        ASCII_SumHashResults[ASCII_SumHash(key, size)]++;
+        StrLenHashResults[StrLenHash(key, size)]++;
+        PolynomialHashResults[PolynomialHash(key,  size)]++;
+        CRC32_HashResults[CRC32_Hash(key, size)]++;
     }
 
     DumpResults(ASCII_SumHashResults, size, "results/word_hash/ASCII_SumHash.txt");

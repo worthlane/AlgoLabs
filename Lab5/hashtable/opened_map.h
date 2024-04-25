@@ -27,10 +27,12 @@ typedef struct
     size_t size;
     size_t cap;
 
+    double load_factor_resize;
+
     address_t address;
 } opened_map_t;
 
-opened_map_t*    OpenedMapCtor(size_t capacity, address_t address_type);
+opened_map_t*    OpenedMapCtor(size_t capacity, address_t address_type, const double load_factor_resize);
 void             OpenedMapDtor(opened_map_t* table);
 void             OpenedMapInsert(opened_map_t* table, int key);
 void             OpenedMapErase(opened_map_t* table, int key);

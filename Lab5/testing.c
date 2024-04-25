@@ -45,7 +45,9 @@ int main(const int argc, const char* argv[])
     printf("%d %d\n", IsInOpenedMap(map, 50), IsInOpenedMap(map, 22));*/
 
 
-    ResearchLoadFactor();
+    //ResearchLoadFactor();
+
+    ResearchHashFuncs();
 
     return 0;
 }
