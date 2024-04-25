@@ -20,12 +20,12 @@ CXXFLAGS += -I $(HOME)
 BUILD_DIR = build/bin
 OBJECTS_DIR = build
 
-SOURCES = testing.c
+SOURCES = testing.c main.c
 
 OBJECTS = $(SOURCES:%.c=$(OBJECTS_DIR)/%.o)
 
 HEAPS_DIR = heaps
-HEAPS_SRC = common.c binheap.c
+HEAPS_SRC = binheap.c
 HEAPS_OBJ = $(HEAPS_SRC:%.c=$(OBJECTS_DIR)/%.o)
 
 ARR_GEN = arrgen
@@ -53,7 +53,13 @@ $(OBJECTS_DIR)/%.o : %.c
 	$(CXX) -c $^ -o $@ $(CXXFLAGS)
 
 
-.PHONY: clean makedirs
+.PHONY: clean makedirs gentests gengrapic
+
+gentests:
+	cd tests && ./testgen.sh 100000 1000000 100000 -1 std_tests && cd ..
+
+gengraphic:
+	cd results/1_point && python3 graphic.py && cd .. && cd ..
 
 clean:
 	rm -rf $(EXECUTABLE) $(OBJECTS_DIR)/*.o $(GEN_DIR)/$(ARR_GEN)

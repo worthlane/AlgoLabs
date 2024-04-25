@@ -25,7 +25,7 @@ int main(const int argc, const char* argv[])
     {
         unsigned int rand_num = ((unsigned) rand()) % (max_num + 1);
 
-        printf("%i ", rand_num);
+        printf("%u ", rand_num);
     }
 
 }
