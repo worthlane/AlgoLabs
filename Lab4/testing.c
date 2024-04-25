@@ -4,6 +4,7 @@
 #include <math.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <limits.h>
 
 #define SHOW_PROGRESS
 
@@ -29,8 +30,6 @@ static double* TestHeapify(const int from, const int to, const int step,
 static bool ValidateArray(int* arr, size_t array_size);
 
 static int* GetArray(const char* input_file);
-
-static const int INT_MIN = -2147483647;
 
 // -------------------------------------------------------------------------
 
