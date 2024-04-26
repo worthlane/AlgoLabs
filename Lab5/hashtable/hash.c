@@ -85,11 +85,7 @@ uint32_t PolynomialHash(const char* key, const size_t arr_size)
 
 uint32_t RemainHash(const unsigned int key, const size_t arr_size)
 {
-    static const int DENOMINATOR = 1000;
-
-    //printf("%d %d\n", key, DENOMINATOR);
-
-    return (key % DENOMINATOR) % arr_size;
+    return key % arr_size;
 }
 
 // --------------------------------------

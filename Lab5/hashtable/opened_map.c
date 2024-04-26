@@ -176,7 +176,7 @@ void OpenedMapInsert(opened_map_t* table, int key)
     table->array[index].data    = key;
     table->array[index].is_full = true;
 
-    OpenedMapResize(table);
+    //OpenedMapResize(table);
 }
 
 // --------------------------------------------------------------
