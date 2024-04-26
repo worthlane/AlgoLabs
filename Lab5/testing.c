@@ -45,9 +45,9 @@ int main(const int argc, const char* argv[])
     printf("%d %d\n", IsInOpenedMap(map, 50), IsInOpenedMap(map, 22));*/
 
 
-    //ResearchLoadFactor();
+    ResearchLoadFactor();
 
-    ResearchHashFuncs();
+    //ResearchHashFuncs();
 
     return 0;
 }
@@ -88,7 +88,7 @@ static void ResearchOpenedLoadFactor(const char* path, address_t address)
     FILE* fp = fopen(path, "w");
     assert(fp);
 
-    opened_map_t* map = OpenedMapCtor(TABLE_SIZE, address);
+    opened_map_t* map = OpenedMapCtor(TABLE_SIZE, address, 100); // TODO
 
     size_t step = 0;
 
@@ -127,7 +127,7 @@ static void ResearchListedLoadFactor(const char* path)
     FILE* fp = fopen(path, "w");
     assert(fp);
 
-    listed_map_t* map = ListedMapCtor(TABLE_SIZE);
+    listed_map_t* map = ListedMapCtor(TABLE_SIZE, 0.6);
 
     size_t step = 0;
     clock_t duration = 0;

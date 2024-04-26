@@ -10,6 +10,10 @@
 
 void FillListElem(list_elem_t* node, int key, const int is_end, list_elem_t* next, list_elem_t* prev);
 
+static void MoveElements(listed_map_t* table, list_elem_t** new_data, const size_t new_table_cap);
+static void InsertElemInList(list_elem_t* last_elem, const int key);
+static void ListedMapResize(listed_map_t* table);
+
 // --------------------------------------------------------------
 
 struct list_elem_t* ListElemCtor()
@@ -35,7 +39,24 @@ void ListElemDtor(struct list_elem_t* node)
 
 // --------------------------------------------------------------
 
-struct listed_map_t* ListedMapCtor(size_t size)
+void ListDtor(struct list_elem_t* root)
+{
+	assert(root);
+
+	list_elem_t* cur = root;
+
+	while (!cur->is_end)
+	{
+		cur = cur->next;
+		free(cur->prev);
+	}
+
+	free(cur);
+}
+
+// --------------------------------------------------------------
+
+struct listed_map_t* ListedMapCtor(size_t size, const double load_factor)
 {
     size_t table_size = 0;
     for (size_t i = 0; i < PRIME_NUMBERS_AMT; i++)
@@ -65,24 +86,31 @@ struct listed_map_t* ListedMapCtor(size_t size)
     table->cap = table_size;
 	table->size = 0;
     table->cells = cells;
+	table->load_factor = load_factor;
 
     return table;
 }
 
 // --------------------------------------------------------------
 
-void ListedMapDtor(struct listed_map_t* table) // TODO
+void ListedMapDtor(struct listed_map_t* table)
 {
 	assert(table);
 
 	table->size = 0;
+
+	for (size_t i = 0; i < table->cap; i++)
+	{
+		ListDtor(table->cells[i]);
+	}
+
 	free(table->cells);
 	free(table);
 }
 
 // --------------------------------------------------------------
 
-static size_t GetKeyIndex(struct listed_map_t* table, int key)
+static size_t GetKeyIndex(struct listed_map_t* table, const int key)
 {
 	assert(table);
 
@@ -94,7 +122,7 @@ static size_t GetKeyIndex(struct listed_map_t* table, int key)
 
 // --------------------------------------------------------------
 
-struct list_elem_t* FindKeyInList(struct list_elem_t* root_cell, int key)
+struct list_elem_t* FindKeyInList(struct list_elem_t* root_cell, const int key)
 {
 	assert(root_cell);
 
@@ -133,10 +161,9 @@ void FillListElem(list_elem_t* node, int key, const int is_end, list_elem_t* nex
 	node->is_end = is_end;
 }
 
-
 // --------------------------------------------------------------
 
-void ListedMapInsert(struct listed_map_t* table, int key)
+void ListedMapInsert(struct listed_map_t* table, const int key)
 {
 	assert(table);
 
@@ -154,21 +181,112 @@ void ListedMapInsert(struct listed_map_t* table, int key)
 
 	assert(key_node);
 
-	struct list_elem_t* new_cell = (struct list_elem_t*) calloc(1, sizeof(struct list_elem_t));
-	assert(new_cell);
-
-	FillListElem(new_cell, key, false, key_node, key_node->prev);
-	(key_node->prev)->next = new_cell;
-	key_node->prev         = new_cell;
+	InsertElemInList(key_node, key);
 
 	table->cells[index] = key_node->next;
 
 	table->size++;
+
+	ListedMapResize(table);
 }
 
 // --------------------------------------------------------------
 
-void ListedMapErase(struct listed_map_t* table, int key)
+static void InsertElemInList(list_elem_t* last_elem, const int key)
+{
+	assert(last_elem);
+
+	struct list_elem_t* new_cell = (struct list_elem_t*) calloc(1, sizeof(struct list_elem_t));
+	assert(new_cell);
+
+	FillListElem(new_cell, key, false, last_elem, last_elem->prev);
+	(last_elem->prev)->next = new_cell;
+	last_elem->prev         = new_cell;
+}
+
+// --------------------------------------------------------------
+
+static void ListedMapResize(listed_map_t* table)
+{
+    double cur_load_factor = (double) table->size / (double) table->cap;
+
+    if (cur_load_factor < table->load_factor)
+        return;
+
+    size_t new_table_cap = 0;
+    size_t cur_table_cap = table->cap;
+
+    for (size_t i = 0; i < PRIME_NUMBERS_AMT; i++)
+    {
+        if (cur_table_cap <= PRIME_NUMBERS[i])
+        {
+            new_table_cap = PRIME_NUMBERS[i];
+            break;
+        }
+    }
+
+    if (new_table_cap == 0)
+    {
+        printf("TOO SMALL TABLE\n");
+        return;
+    }
+
+    list_elem_t** new_data = calloc(new_table_cap, sizeof(list_elem_t*));
+    assert(new_data);
+	for (size_t i = 0; i < new_table_cap; i++)
+        new_data[i] = ListElemCtor();
+
+	MoveElements(table, new_data, new_table_cap);
+
+    for (size_t i = 0; i < table->cap; i++)
+		ListDtor(table->cells[i]);
+
+	free(table->cells);
+
+    table->cells = new_data;
+    table->cap   = new_table_cap;
+}
+
+// --------------------------------------------------------------
+
+static void MoveElements(listed_map_t* table, list_elem_t** new_data, const size_t new_table_cap)
+{
+	size_t cur_list_size = 0;
+	size_t cur_table_cap = table->cap;
+
+    for (size_t i = 0; i < cur_table_cap; i++)
+    {
+		cur_list_size = GetListSize(table->cells[i]);
+
+		list_elem_t* cur_elem = table->cells[i];
+
+		while (!cur_elem->is_end)
+		{
+			int key = cur_elem->key;
+
+			size_t index = BitHash(key, new_table_cap);
+			struct list_elem_t* root_cell = new_data[index];
+			struct list_elem_t* key_node = FindKeyInList(root_cell, key);
+
+			if (key_node->is_end != true)
+			{
+				key_node->key = key;
+				return;
+			}
+			assert(key_node);
+
+			InsertElemInList(key_node, key);
+
+			new_data[index] = key_node->next;
+
+			cur_elem = cur_elem->next;
+		}
+    }
+}
+
+// --------------------------------------------------------------
+
+void ListedMapErase(struct listed_map_t* table, const int key)
 {
 	assert(table);
 
@@ -192,7 +310,7 @@ void ListedMapErase(struct listed_map_t* table, int key)
 
 // --------------------------------------------------------------
 
-int IsInListedMap(struct listed_map_t* table, int key)
+int IsInListedMap(struct listed_map_t* table, const int key)
 {
 	assert(table);
 

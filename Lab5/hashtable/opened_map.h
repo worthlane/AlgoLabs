@@ -27,7 +27,7 @@ typedef struct
     size_t size;
     size_t cap;
 
-    double load_factor_resize;
+    double load_factor;
 
     address_t address;
 } opened_map_t;

@@ -12,7 +12,31 @@ static size_t GetDoubleAddress(opened_map_t* table, const int key);
 static size_t GetLinearAddress(opened_map_t* table, const int key);
 static size_t GetQuadraticAddress(opened_map_t* table, const int key);
 
+static void OpenedMapResize(opened_map_t* table);
+
 typedef size_t (*address_func)(opened_map_t, const int);
+
+static inline size_t GetAddress(opened_map_t* table, const int key)
+{
+    size_t index = 0;
+    switch (table->address)
+    {
+        case (LINEAR):
+            index = GetLinearAddress(table, key);
+            break;
+        case (QUADRATIC):
+            index = GetQuadraticAddress(table, key);
+            break;
+        case (DOUBLE):
+            index = GetDoubleAddress(table, key);
+            break;
+        default:
+            printf("ADDRESSATION ERROR\n");
+            return NULL - 1;
+    }
+
+    return index;
+}
 
 // --------------------------------------------------------------
 
@@ -141,22 +165,7 @@ static size_t GetDoubleAddress(opened_map_t* table, const int key)
 
 void OpenedMapInsert(opened_map_t* table, int key)
 {
-    size_t index = 0;
-    switch (table->address)
-    {
-        case (LINEAR):
-            index = GetLinearAddress(table, key);
-            break;
-        case (QUADRATIC):
-            index = GetQuadraticAddress(table, key);
-            break;
-        case (DOUBLE):
-            index = GetDoubleAddress(table, key);
-            break;
-        default:
-            printf("ADDRESSATION ERROR\n");
-            return;
-    }
+    size_t index = GetAddress(table, key);
 
     map_elem_t elem = table->array[index];
 
@@ -166,6 +175,8 @@ void OpenedMapInsert(opened_map_t* table, int key)
     table->size++;
     table->array[index].data    = key;
     table->array[index].is_full = true;
+
+    OpenedMapResize(table);
 }
 
 // --------------------------------------------------------------
@@ -178,11 +189,13 @@ static void OpenedMapResize(opened_map_t* table)
         return;
 
     size_t new_table_cap = 0;
+    size_t cur_table_cap = table->cap;
+
     for (size_t i = 0; i < PRIME_NUMBERS_AMT; i++)
     {
-        if (table->cap <= PRIME_NUMBERS[i])
+        if (cur_table_cap <= PRIME_NUMBERS[i])
         {
-            table_cap = PRIME_NUMBERS[i];
+            new_table_cap = PRIME_NUMBERS[i];
             break;
         }
     }
@@ -193,30 +206,42 @@ static void OpenedMapResize(opened_map_t* table)
         return;
     }
 
-    // TODO 
+    map_elem_t* new_data = calloc(new_table_cap, sizeof(map_elem_t));
+    assert(new_data);
 
+    map_elem_t elem = {};
+    int        key  = 0;
+
+    for (size_t i = 0; i < cur_table_cap; i++)
+    {
+        elem = table->array[i];
+        key  = elem.data;
+
+        if (elem.is_full)
+        {
+            size_t index = GetAddress(table, key);
+
+            map_elem_t new_elem = new_data[index];
+
+            if (!new_elem.is_full)
+            {
+                new_data[index].data    = key;
+                new_data[index].is_full = true;
+            }
+        }
+    }
+
+    free(table->array);
+
+    table->array = new_data;
+    table->cap  = new_table_cap;
 }
 
 // --------------------------------------------------------------
 
 void OpenedMapErase(opened_map_t* table, int key)
 {
-    size_t index = 0;
-    switch (table->address)
-    {
-        case (LINEAR):
-            index = GetLinearAddress(table, key);
-            break;
-        case (QUADRATIC):
-            index = GetQuadraticAddress(table, key);
-            break;
-        case (DOUBLE):
-            index = GetDoubleAddress(table, key);
-            break;
-        default:
-            printf("ADDRESSATION ERROR\n");
-            return;
-    }
+    size_t index = GetAddress(table, key);
 
     map_elem_t elem = table->array[index];
 
@@ -232,22 +257,7 @@ void OpenedMapErase(opened_map_t* table, int key)
 
 int IsInOpenedMap(opened_map_t* table, int key)
 {
-    size_t index = 0;
-    switch (table->address)
-    {
-        case (LINEAR):
-            index = GetLinearAddress(table, key);
-            break;
-        case (QUADRATIC):
-            index = GetQuadraticAddress(table, key);
-            break;
-        case (DOUBLE):
-            index = GetDoubleAddress(table, key);
-            break;
-        default:
-            printf("ADDRESSATION ERROR\n");
-            return false;
-    }
+    size_t index = GetAddress(table, key);
 
     map_elem_t elem = table->array[index];
 
