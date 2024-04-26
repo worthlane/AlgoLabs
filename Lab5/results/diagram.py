@@ -13,16 +13,16 @@ def read_data(filename):
 def plot_bar_chart(x_values, y_values):
     plt.figure(figsize=(12, 6))
     plt.bar(x_values, y_values, width=1.0)
-    plt.xlabel('Collisions')
-    plt.ylabel('Cells')
-    plt.title('Float to int (bit) hash')
+    plt.xlabel('Cells')
+    plt.ylabel('Collisions')
+    plt.title('Mantissa mul exponent hash (float)')
     #plt.ylim(0, 50)
-    #plt.xlim(0, 3000)
+    plt.xlim(0, 1000)
 
     plt.show()
 
 def main():
-    filename = 'float_hash/IntBitHash.txt'
+    filename = 'float_hash/MantissaMulExponentHash.txt'
     x_values, y_values = read_data(filename)
     plot_bar_chart(x_values, y_values)
 

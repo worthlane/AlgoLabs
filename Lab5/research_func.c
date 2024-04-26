@@ -5,7 +5,7 @@
 
 #include "hashtable/hash.h"
 
-static const int   LOAD_FACTOR     = 10;
+static const int   TESTING_TABLE_SIZE = 1000;
 
 static const char* INT_KEYS_PATH   = "tests/keys/int_keys.in";
 static const char* FLOAT_KEYS_PATH = "tests/keys/float_keys.in";
@@ -34,7 +34,7 @@ static void ResearchIntFuncs()
     size_t buf_size = 0;
     assert(fscanf(fp, "%lu", &buf_size));
 
-    size_t size = buf_size / LOAD_FACTOR;
+    size_t size = TESTING_TABLE_SIZE;
 
     size_t* RemainHashResults = calloc(size, sizeof(size_t));
     size_t* BitHashResults    = calloc(size, sizeof(size_t));
@@ -68,7 +68,7 @@ static void ResearchFloatFuncs()
     size_t buf_size = 0;
     assert(fscanf(fp, "%lu", &buf_size));
 
-    size_t size = buf_size / LOAD_FACTOR;
+    size_t size = TESTING_TABLE_SIZE;
 
     size_t* IntBitHashResults              = calloc(size, sizeof(size_t));
     size_t* FloatBitHashResults            = calloc(size, sizeof(size_t));
@@ -109,7 +109,7 @@ static void ResearchWordFuncs()
     size_t buf_size = 0;
     assert(fscanf(fp, "%lu", &buf_size));
 
-    size_t size = buf_size / LOAD_FACTOR;
+    size_t size = TESTING_TABLE_SIZE;
 
     size_t* ASCII_SumHashResults  = calloc(size, sizeof(size_t));
     size_t* StrLenHashResults     = calloc(size, sizeof(size_t));
