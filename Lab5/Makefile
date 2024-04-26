@@ -20,12 +20,16 @@ CXXFLAGS += -I $(HOME)
 BUILD_DIR = build/bin
 OBJECTS_DIR = build
 
-SOURCES = testing.c research_func.c
+SOURCES = main.c
 OBJECTS = $(SOURCES:%.c=$(OBJECTS_DIR)/%.o)
 
 TABLE_DIR = hashtable
 TABLE_SRC = hash.c listed_map.c opened_map.c
 TABLE_OBJ = $(TABLE_SRC:%.c=$(OBJECTS_DIR)/%.o)
+
+LAUNCH_DIR = launch
+LAUNCH_SRC = load_factor_test.c research_func.c
+LAUNCH_OBJ = $(LAUNCH_SRC:%.c=$(OBJECTS_DIR)/%.o)
 
 GEN_DIR = tests
 
@@ -56,10 +60,13 @@ $(GEN_DIR)/$(INT_GEN): $(INT_OBJ)
 $(OBJECTS_DIR)/%.o : $(GEN_DIR)/%.c
 	$(CXX) -c $^ -o $@ $(CXXFLAGS)
 
-$(EXECUTABLE): $(OBJECTS) $(TABLE_OBJ)
+$(EXECUTABLE): $(LAUNCH_OBJ) $(TABLE_OBJ) $(OBJECTS)
 	$(CXX) $^ -o $@ $(CXXFLAGS)
 
 $(OBJECTS_DIR)/%.o : $(TABLE_DIR)/%.c
+	$(CXX) -c $^ -o $@ $(CXXFLAGS)
+
+$(OBJECTS_DIR)/%.o : $(LAUNCH_DIR)/%.c
 	$(CXX) -c $^ -o $@ $(CXXFLAGS)
 
 $(OBJECTS_DIR)/%.o : %.c
