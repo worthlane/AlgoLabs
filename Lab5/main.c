@@ -5,6 +5,7 @@
 #include <assert.h>
 
 #include "launch/load_factor_test.h"
+#include "launch/ideal_hash_research.h"
 #include "hashtable/hash.h"
 #include "hashtable/listed_map.h"
 #include "hashtable/opened_map.h"
@@ -52,7 +53,9 @@ int main(const int argc, const char* argv[])
 
     //ResearchHashFuncs();
 
-    LoadFactorsThirdPointData();
+    //LoadFactorsThirdPointData();
+
+    CompareMaps();
 
     return 0;
 }

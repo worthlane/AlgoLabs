@@ -24,11 +24,11 @@ SOURCES = main.c
 OBJECTS = $(SOURCES:%.c=$(OBJECTS_DIR)/%.o)
 
 TABLE_DIR = hashtable
-TABLE_SRC = hash.c listed_map.c opened_map.c
+TABLE_SRC = hash.c listed_map.c opened_map.c ideal_map.c
 TABLE_OBJ = $(TABLE_SRC:%.c=$(OBJECTS_DIR)/%.o)
 
 LAUNCH_DIR = launch
-LAUNCH_SRC = load_factor_test.c research_func.c
+LAUNCH_SRC = load_factor_test.c research_func.c ideal_hash_research.c
 LAUNCH_OBJ = $(LAUNCH_SRC:%.c=$(OBJECTS_DIR)/%.o)
 
 GEN_DIR = tests
