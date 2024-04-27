@@ -24,7 +24,7 @@ SOURCES = main.c
 OBJECTS = $(SOURCES:%.c=$(OBJECTS_DIR)/%.o)
 
 TREE_DIR = trees
-TREE_SRC = avl.c treap.c splay.c
+TREE_SRC = avl.c treap.c splay.c bst.c
 TREE_OBJ = $(TREE_SRC:%.c=$(OBJECTS_DIR)/%.o)
 
 #LAUNCH_DIR = launch

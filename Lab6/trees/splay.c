@@ -9,8 +9,6 @@
 
 #include "splay.h"
 
-//static const size_t MAX_WORD_LEN = 500;
-
 static double_splay_node_t* Split(splay_node_t* node, const int key);
 
 static splay_node_t*    NodeCtor(const int key, const splay_node_t* left, const splay_node_t* right, const splay_node_t* upper);
