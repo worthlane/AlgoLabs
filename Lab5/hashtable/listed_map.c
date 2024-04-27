@@ -10,7 +10,6 @@
 
 void FillListElem(list_elem_t* node, int key, const int is_end, list_elem_t* next, list_elem_t* prev);
 
-static void MoveElements(listed_map_t* table, list_elem_t** new_data, const size_t new_table_cap);
 static void InsertElemInList(list_elem_t* last_elem, const int key);
 static void ListedMapResize(listed_map_t* table);
 
@@ -245,43 +244,6 @@ static void ListedMapResize(listed_map_t* table)
 
 // --------------------------------------------------------------
 
-static void MoveElements(listed_map_t* table, list_elem_t** new_data, const size_t new_table_cap)
-{
-	size_t cur_list_size = 0;
-	size_t cur_table_cap = table->cap;
-
-    for (size_t i = 0; i < cur_table_cap; i++)
-    {
-		cur_list_size = GetListSize(table->cells[i]);
-
-		list_elem_t* cur_elem = table->cells[i];
-
-		while (!cur_elem->is_end)
-		{
-			int key = cur_elem->key;
-
-			size_t index = BitHash(key, new_table_cap);
-			struct list_elem_t* root_cell = new_data[index];
-			struct list_elem_t* key_node = FindKeyInList(root_cell, key);
-
-			if (key_node->is_end != true)
-			{
-				key_node->key = key;
-				return;
-			}
-			assert(key_node);
-
-			InsertElemInList(key_node, key);
-
-			new_data[index] = key_node->next;
-
-			cur_elem = cur_elem->next;
-		}
-    }
-}
-
-// --------------------------------------------------------------
-
 void ListedMapErase(struct listed_map_t* table, const int key)
 {
 	assert(table);
@@ -346,4 +308,3 @@ static size_t GetListSize(struct list_elem_t* root_cell)
 
 	return size;
 }
-
