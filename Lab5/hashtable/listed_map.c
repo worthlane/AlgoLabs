@@ -208,43 +208,39 @@ static void InsertElemInList(list_elem_t* last_elem, const int key)
 
 static void ListedMapResize(listed_map_t* table)
 {
-    double cur_load_factor = (double) table->size / (double) table->cap;
+	double cur_load_factor = (double) table->size / (double) table->cap;
 
-    if (cur_load_factor < table->load_factor)
+    if (cur_load_factor < table->load_factor && table->size < table->cap)
         return;
 
-    size_t new_table_cap = 0;
     size_t cur_table_cap = table->cap;
 
-    for (size_t i = 0; i < PRIME_NUMBERS_AMT; i++)
+    listed_map_t* new_map = ListedMapCtor(cur_table_cap + 1, table->load_factor);
+    assert(new_map);
+
+	list_elem_t* cur_elem = NULL;
+
+	for (size_t i = 0; i < cur_table_cap; i++)
     {
-        if (cur_table_cap <= PRIME_NUMBERS[i])
-        {
-            new_table_cap = PRIME_NUMBERS[i];
-            break;
-        }
+		cur_elem = table->cells[i];
+
+		while (!cur_elem->is_end)
+		{
+			ListedMapInsert(new_map, cur_elem->key);
+
+			cur_elem = cur_elem->next;
+		}
     }
-
-    if (new_table_cap == 0)
-    {
-        printf("TOO SMALL TABLE\n");
-        return;
-    }
-
-    list_elem_t** new_data = calloc(new_table_cap, sizeof(list_elem_t*));
-    assert(new_data);
-	for (size_t i = 0; i < new_table_cap; i++)
-        new_data[i] = ListElemCtor();
-
-	MoveElements(table, new_data, new_table_cap);
 
     for (size_t i = 0; i < table->cap; i++)
 		ListDtor(table->cells[i]);
 
 	free(table->cells);
 
-    table->cells = new_data;
-    table->cap   = new_table_cap;
+    table->cells = new_map->cells;
+    table->cap   = new_map->cap;
+
+	free(new_map);
 }
 
 // --------------------------------------------------------------

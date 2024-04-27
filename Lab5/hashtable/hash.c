@@ -197,3 +197,5 @@ uint32_t MantissaMulExponentHash(const float key, const size_t arr_size)
 
     return (mantissa * exponent) % arr_size;
 }
+
+// --------------------------------------

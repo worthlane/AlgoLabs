@@ -142,7 +142,7 @@ static size_t GetDoubleAddress(opened_map_t* table, const int key)
     assert(table);
 
     size_t index1 = BitHash(key, table->cap);
-    size_t index2 = key;
+    size_t index2 = key % (table->cap - 1) + 1;
 
     size_t index = (index1 + index2) % table->cap;
 
@@ -157,6 +157,8 @@ static size_t GetDoubleAddress(opened_map_t* table, const int key)
             return index;
 
         index = (index + index2) % (table->cap);
+
+        //printf("index %d %d\n", index2, table->cap);
     }
     while (true);
 }
@@ -176,7 +178,7 @@ void OpenedMapInsert(opened_map_t* table, int key)
     table->array[index].data    = key;
     table->array[index].is_full = true;
 
-    //OpenedMapResize(table);
+    OpenedMapResize(table);
 }
 
 // --------------------------------------------------------------
@@ -185,29 +187,13 @@ static void OpenedMapResize(opened_map_t* table)
 {
     double cur_load_factor = (double) table->size / (double) table->cap;
 
-    if (cur_load_factor < table->load_factor)
+    if (cur_load_factor < table->load_factor && table->size < table->cap)
         return;
 
-    size_t new_table_cap = 0;
     size_t cur_table_cap = table->cap;
 
-    for (size_t i = 0; i < PRIME_NUMBERS_AMT; i++)
-    {
-        if (cur_table_cap <= PRIME_NUMBERS[i])
-        {
-            new_table_cap = PRIME_NUMBERS[i];
-            break;
-        }
-    }
-
-    if (new_table_cap == 0)
-    {
-        printf("TOO SMALL TABLE\n");
-        return;
-    }
-
-    map_elem_t* new_data = calloc(new_table_cap, sizeof(map_elem_t));
-    assert(new_data);
+    opened_map_t* new_map = OpenedMapCtor(cur_table_cap + 1, table->address, table->load_factor);
+    assert(new_map);
 
     map_elem_t elem = {};
     int        key  = 0;
@@ -218,24 +204,17 @@ static void OpenedMapResize(opened_map_t* table)
         key  = elem.data;
 
         if (elem.is_full)
-        {
-            size_t index = GetAddress(table, key);
-
-            map_elem_t new_elem = new_data[index];
-
-            if (!new_elem.is_full)
-            {
-                new_data[index].data    = key;
-                new_data[index].is_full = true;
-            }
-        }
+            OpenedMapInsert(new_map, key);
     }
 
     free(table->array);
 
-    table->array = new_data;
-    table->cap  = new_table_cap;
+    table->array = new_map->array;
+    table->cap   = new_map->cap;
+
+    free(new_map);
 }
+
 
 // --------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 #ifndef __LOAD_FACTOR_TEST_H
 #define __LOAD_FACTOR_TEST_H
 
-void ResearchLoadFactor();
+void LoadFactorsFirstPointData();
 
 #endif

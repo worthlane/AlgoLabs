@@ -45,10 +45,17 @@ FLOAT_GEN = floatgen
 FLOAT_SRC = floatgen.c
 FLOAT_OBJ = $(FLOAT_SRC:%.c=$(OBJECTS_DIR)/%.o)
 
+REQUEST_GEN = request
+REQUEST_SRC = requests.c
+REQUEST_OBJ = $(REQUEST_SRC:%.c=$(OBJECTS_DIR)/%.o)
+
 .PHONY: all
-all: $(EXECUTABLE) $(GEN_DIR)/$(INT_GEN) $(GEN_DIR)/$(WORD_GEN) $(GEN_DIR)/$(FLOAT_GEN)
+all: $(EXECUTABLE) $(GEN_DIR)/$(INT_GEN) $(GEN_DIR)/$(WORD_GEN) $(GEN_DIR)/$(FLOAT_GEN) $(GEN_DIR)/$(REQUEST_GEN)
 
 $(GEN_DIR)/$(FLOAT_GEN): $(FLOAT_OBJ)
+	$(CXX) $^ -o $@ $(CXXFLAGS)
+
+$(GEN_DIR)/$(REQUEST_GEN): $(REQUEST_OBJ)
 	$(CXX) $^ -o $@ $(CXXFLAGS)
 
 $(GEN_DIR)/$(WORD_GEN): $(WORD_OBJ)

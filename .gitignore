@@ -1,3 +1,6 @@
 .vscode
 Lab3
 .DS_Store
+Lab5/tests/equal_requests
+Lab5/tests/keys
+Lab5/tests/not_equal_requests

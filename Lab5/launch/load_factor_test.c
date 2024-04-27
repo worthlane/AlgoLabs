@@ -18,51 +18,106 @@ static const char* QUAD_OPEN_MAP_PATH = "results/load_factor/QuadraticOpenedMap.
 static const char* DBL_OPEN_MAP_PATH  = "results/load_factor/DoubleOpenedMap.txt";
 
 static const size_t LOAD_FACTOR_TESTS = 1000000;
-static const size_t LOAD_FACTOR_STEP  = 10000;
-static const size_t TABLE_SIZE        = LOAD_FACTOR_TESTS;
 
-static void ResearchListedLoadFactor(const char* path);
-static void ResearchOpenedLoadFactor(const char* path, address_t address);
+static const size_t LIN_OPENED_LF  = -1; // TODO
+static const size_t QUAD_OPENED_LF = -1;
+static const size_t DBL_OPENED_LF  = -1;
+static const size_t LISTED_LF      = 0.7;
+
+static const size_t MIN_TABLE_SIZE    = 1;
+
+static double ResearchOpenedLoadFactor(const address_t address, const double load_factor);
+static double ResearchListedLoadFactor(const double load_factor);
+
+static void ResearchListedLoadFactors(const char* path, const double min_lf, const double max_lf, const double step);
+static void ResearchOpenedLoadFactors(const char* path, const double min_lf, const double max_lf, const double step,
+                                        const address_t address);
 
 // -----------------------------------------------------------------
 
-void GetFirstPointData()
+void LoadFactorsFirstPointData()
 {
-    /*double* times = NULL;
+    static const double OPENED_MIN  = 0.1;
+    static const double OPENED_MAX  = 1;
+    static const double OPENED_STEP = 0.01;
 
-    times = TestHeapify(STD_TESTS_FROM, STD_TESTS_TO, STD_TESTS_STEP, STD_TESTS_PATH,
-                     "results/1_point/LinearHeapify.txt",
-                     LinearHeapify);
+    ResearchOpenedLoadFactors(LIN_OPEN_MAP_PATH, OPENED_MIN, OPENED_MAX, OPENED_STEP, LINEAR);
+    ResearchOpenedLoadFactors(DBL_OPEN_MAP_PATH, OPENED_MIN, OPENED_MAX, OPENED_STEP, DOUBLE);
+    ResearchOpenedLoadFactors(QUAD_OPEN_MAP_PATH, OPENED_MIN, OPENED_MAX, OPENED_STEP, QUADRATIC);
 
-    free(times);
+    static const double LISTED_MIN  = 0.1;
+    static const double LISTED_MAX  = 25;
+    static const double LISTED_STEP = 0.1;
 
-    times = TestHeapify(STD_TESTS_FROM, STD_TESTS_TO, STD_TESTS_STEP, STD_TESTS_PATH,
-                     "results/1_point/StdHeapify.txt",
-                     StdHeapify);
-
-    free(times);*/
+    ResearchListedLoadFactors(LIST_MAP_PATH, LISTED_MIN, LISTED_MAX, LISTED_STEP);
 }
 
 // -----------------------------------------------------------------
 
-void ResearchLoadFactor()
+static void ResearchOpenedLoadFactors(const char* path, const double min_lf, const double max_lf, const double step,
+                                        const address_t address)
 {
-    //ResearchListedLoadFactor(LIST_MAP_PATH);
-    ResearchOpenedLoadFactor(DBL_OPEN_MAP_PATH, DOUBLE);
-    //ResearchOpenedLoadFactor(LIN_OPEN_MAP_PATH, LINEAR);
-    //ResearchOpenedLoadFactor(QUAD_OPEN_MAP_PATH, QUADRATIC);
-}
+    #ifdef SHOW_PROGRESS
+        printf("FILE: \"%s\"\n", path);
+    #endif
 
-// -----------------------------------------------------------------
-
-static void ResearchOpenedLoadFactor(const char* path, address_t address)
-{
     FILE* fp = fopen(path, "w");
     assert(fp);
 
-    opened_map_t* map = OpenedMapCtor(TABLE_SIZE, address, 100); // TODO
+    double cur_lf = min_lf;
+    double time   = 0;
 
-    size_t step = 0;
+    while (cur_lf < max_lf)
+    {
+        time = ResearchOpenedLoadFactor(address, cur_lf);
+
+        fprintf(fp, "%.7lf %.7lf\n", cur_lf, time);
+
+        cur_lf += step;
+
+        #ifdef SHOW_PROGRESS
+            printf("cur_lf: %lf\n", cur_lf);
+        #endif
+    }
+
+    fclose(fp);
+}
+
+// -----------------------------------------------------------------
+
+static void ResearchListedLoadFactors(const char* path, const double min_lf, const double max_lf, const double step)
+{
+    #ifdef SHOW_PROGRESS
+        printf("FILE: \"%s\"\n", path);
+    #endif
+
+    FILE* fp = fopen(path, "w");
+    assert(fp);
+
+    double cur_lf = min_lf;
+    double time   = 0;
+
+    while (cur_lf < max_lf)
+    {
+        time = ResearchListedLoadFactor(cur_lf);
+
+        fprintf(fp, "%.7lf %.7lf\n", cur_lf, time);
+
+        cur_lf += step;
+
+        #ifdef SHOW_PROGRESS
+            printf("cur_lf: %lf\n", cur_lf);
+        #endif
+    }
+
+    fclose(fp);
+}
+
+// -----------------------------------------------------------------
+
+static double ResearchOpenedLoadFactor(const address_t address, const double load_factor)
+{
+    opened_map_t* map = OpenedMapCtor(MIN_TABLE_SIZE, address, load_factor);
 
     clock_t duration = 0;
 
@@ -70,38 +125,24 @@ static void ResearchOpenedLoadFactor(const char* path, address_t address)
     {
         int num = rand();
 
-        printf("%lu %d\n", i, num);
-
         clock_t start = clock();
         OpenedMapInsert(map, num);
         clock_t end   = clock();
 
         duration += end - start;
-        step++;
-
-        if (step >= LOAD_FACTOR_STEP)
-        {
-            fprintf(fp, "%.7lf %.7lf\n", (double) map->size / (double) map->cap,
-                                        ((double) duration) / (CLOCKS_PER_SEC * step));
-            step = 0;
-            duration = 0;   // TODO не обнулять dur, а сделать типо прямой с изгибами
-        }
     }
 
     OpenedMapDtor(map);
-    fclose(fp);
+
+    return ((double) duration) / (CLOCKS_PER_SEC);
 }
 
 // -----------------------------------------------------------------
 
-static void ResearchListedLoadFactor(const char* path)
+static double ResearchListedLoadFactor(const double load_factor)
 {
-    FILE* fp = fopen(path, "w");
-    assert(fp);
+    listed_map_t* map = ListedMapCtor(MIN_TABLE_SIZE, load_factor);
 
-    listed_map_t* map = ListedMapCtor(TABLE_SIZE, 0.6);
-
-    size_t step = 0;
     clock_t duration = 0;
 
     for (size_t i = 0; i < LOAD_FACTOR_TESTS; i++)
@@ -113,17 +154,9 @@ static void ResearchListedLoadFactor(const char* path)
         clock_t end   = clock();
 
         duration += end - start;
-        step++;
-
-        if (step >= LOAD_FACTOR_STEP)
-        {
-            fprintf(fp, "%.7lf %.7lf\n", (double) map->size / (double) map->cap,
-                                        ((double) duration) / (CLOCKS_PER_SEC * step));
-            step = 0;
-            duration = 0;
-        }
     }
 
     ListedMapDtor(map);
-    fclose(fp);
+
+    return ((double) duration) / (CLOCKS_PER_SEC);
 }

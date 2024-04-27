@@ -16,42 +16,43 @@ int main(const int argc, const char* argv[])
     srand(time(NULL));
     //printf("%lu\n", KnuthHash(442342000));
 
-    opened_map_t* map = OpenedMapCtor(2, DOUBLE, 1);
+    /*listed_map_t* map = ListedMapCtor(2, 0.3);
 
     printf("1 {%d} %d\n", map->cap, map->size);
-    OpenedMapInsert(map, 50);
+    ListedMapInsert(map, 50);
     printf("2 {%d} %d\n", map->cap, map->size);
-    OpenedMapInsert(map, 20);
+    ListedMapInsert(map, 20);
     printf("3 {%d} %d\n", map->cap, map->size);
-    OpenedMapInsert(map, 30);
+    ListedMapInsert(map, 30);
     printf("4 {%d} %d\n", map->cap, map->size);
-    OpenedMapInsert(map, 33);
+    ListedMapInsert(map, 33);
     printf("5 {%d} %d\n", map->cap, map->size);
-
-
-    OpenedMapInsert(map, 70);
-
-
+    ListedMapInsert(map, 70);
     printf("6 {%d} %d\n", map->cap, map->size);
-    OpenedMapInsert(map, 51);
+    ListedMapInsert(map, 51);
+
     printf("7 {%d} %d\n", map->cap, map->size);
-    OpenedMapInsert(map, 21);
+
+    ListedMapInsert(map, 21);
+
     printf("8 {%d} %d\n", map->cap, map->size);
-    OpenedMapInsert(map, 31);
+
+    ListedMapInsert(map, 31);
     printf("9 {%d} %d\n", map->cap, map->size);
-    OpenedMapInsert(map, 31);
+    ListedMapInsert(map, 31);
     printf("10 {%d} %d\n", map->cap, map->size);
-    OpenedMapInsert(map, 71);
+    ListedMapInsert(map, 71);
 
-    /*printf("%d %d\n", IsInOpenedMap(map, 50), IsInOpenedMap(map, 22));
+    ListedMapErase(map, 22);
 
-    OpenedMapErase(map, 22);
-
-    printf("%d %d\n", IsInOpenedMap(map, 50), IsInOpenedMap(map, 22));*/
+    printf("%d %d\n", IsInListedMap(map, 50), IsInListedMap(map, 22));
+    printf("%d %d\n", IsInListedMap(map, 31), IsInListedMap(map, 51));*/
 
     //ResearchLoadFactor();
 
     //ResearchHashFuncs();
+
+    LoadFactorsFirstPointData();
 
     return 0;
 }
