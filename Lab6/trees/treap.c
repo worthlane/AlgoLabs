@@ -89,7 +89,7 @@ treap_t* TreapCtor()
 
 // ---------------------------------------------------------------------
 
-void TreapInsert(treap_t* treap, int key)
+void TreapInsert(treap_t* treap, const int key)
 {
 	assert(treap);
 
@@ -117,7 +117,7 @@ void TreapInsert(treap_t* treap, int key)
 
 // ---------------------------------------------------------------------
 
-void TreapRemove(treap_t* treap, int key)
+void TreapRemove(treap_t* treap, const int key)
 {
 	assert(treap);
 

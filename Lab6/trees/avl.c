@@ -17,6 +17,8 @@ static enum Side
 {
 	RIGHT,
 	LEFT,
+
+    UNKNOWN,
 };
 
 static void ConnectAVLNodes(avl_node_t* parent, const enum Side side, avl_node_t* son);
@@ -37,7 +39,6 @@ static avl_node_t* BalanceAVLNode(avl_node_t* node);
 static avl_node_t* FindAVLNode(avl_tree_t* tree, const int x);
 
 static void DestructAVLTree(avl_node_t* root);
-
 static void UpdateHeight(avl_node_t* node);
 
 static inline int Min(const int a, const int b)
@@ -48,6 +49,23 @@ static inline int Min(const int a, const int b)
 static inline int Max(const int a, const int b)
 {
 	return (a < b) ? b : a;
+}
+
+static enum Side WhichSideIsSon(avl_node_t* son);
+static void DisconnectSon(avl_node_t* son);
+
+static avl_node_t* RemoveNodeFromSubtree(avl_node_t* deleting);
+static avl_node_t* RemoveAVLNode(avl_node_t* root, const int key);
+
+static avl_node_t* AVLNext(avl_node_t* tree, const int key);
+static inline avl_node_t* MinNode(avl_node_t* node1, avl_node_t* node2)
+{
+	if (node1 == NULL)
+		return node2;
+	else if (node2 == NULL)
+		return node1;
+
+	return (node1->key < node2->key) ? node1 : node2;
 }
 
 // =====================================================================
@@ -104,6 +122,28 @@ avl_tree_t* AVLTreeCtor()
 
 // ---------------------------------------------------------------------
 
+static avl_node_t* AVLNext(avl_node_t* root, const int key)
+{
+	avl_node_t* cur = root;
+
+	avl_node_t* min = NULL;
+
+	while (cur != NULL)
+	{
+		if (cur->key > key)
+		{
+			min = MinNode(min, cur);
+			cur = cur->left;
+		}
+		else
+			cur = cur->right;
+	}
+
+	return min;
+}
+
+// ---------------------------------------------------------------------
+
 void AVLTreeInsert(avl_tree_t* tree, const int key)
 {
 	assert(tree);
@@ -115,6 +155,15 @@ void AVLTreeInsert(avl_tree_t* tree, const int key)
 	assert(node);
 
 	tree->root = InsertAVLNode(tree->root, node);
+}
+
+// ---------------------------------------------------------------------
+
+void AVLTreeRemove(avl_tree_t* tree, const int key)
+{
+    assert(tree);
+
+    tree->root = RemoveAVLNode(tree->root, key);
 }
 
 // ---------------------------------------------------------------------
@@ -138,8 +187,91 @@ static avl_node_t* InsertAVLNode(avl_node_t* root, avl_node_t* node)
 
 // ---------------------------------------------------------------------
 
+static avl_node_t* RemoveAVLNode(avl_node_t* root, const int key)
+{
+    if (root == NULL)
+		return NULL;
+
+	if (key < root->key)
+		ConnectAVLNodes(root, LEFT, RemoveAVLNode(root->left, key));
+	else if (key > root->key)
+		ConnectAVLNodes(root, RIGHT, RemoveAVLNode(root->right, key));
+	else
+        root = RemoveNodeFromSubtree(root);
+
+	return BalanceAVLNode(root);
+}
+
+// ---------------------------------------------------------------------
+
+static avl_node_t* RemoveNodeFromSubtree(avl_node_t* deleting)
+{
+    assert(deleting);
+
+    avl_node_t* new_root = NULL;
+
+    if (deleting->left == NULL && deleting->right == NULL)
+    {
+        DisconnectSon(deleting);
+        free(deleting);
+    }
+    else if (deleting->left == NULL && deleting->right != NULL)
+    {
+        enum Side side = WhichSideIsSon(deleting);
+
+        new_root = deleting->right;
+
+        if (side == UNKNOWN)
+            deleting->right->upper = NULL;
+        else
+            ConnectAVLNodes(deleting->upper, side, deleting->right);
+
+        free(deleting);
+    }
+    else if (deleting->right == NULL && deleting->left != NULL)
+    {
+        enum Side side = WhichSideIsSon(deleting);
+
+        new_root = deleting->left;
+
+        if (side == UNKNOWN)
+            deleting->left->upper = NULL;
+        else
+            ConnectAVLNodes(deleting->upper, side, deleting->right);
+
+        free(deleting);
+    }
+    else
+    {
+        avl_node_t* next = AVLNext(deleting, deleting->key);
+        deleting->key = next->key;
+
+        enum Side side = WhichSideIsSon(next);
+
+        if (side == LEFT)
+            ConnectAVLNodes(next->upper, LEFT, next->right);
+        else
+            ConnectAVLNodes(next->upper, RIGHT, next->left);
+
+        new_root = deleting;
+
+        free(next);
+    }
+
+    return new_root;
+}
+
+
+
+// ---------------------------------------------------------------------
+
 static avl_node_t* BalanceAVLNode(avl_node_t* node)
 {
+    if (node == NULL)
+    {
+        return NULL;
+    }
+
 	int a_balance = GetBalance(node);                       // for better naming understanding, visit https://neerc.ifmo.ru/wiki/index.php?title=АВЛ-дерево
 
 	if (node->right != NULL && a_balance <= -2)             // left rotate checking
@@ -326,3 +458,39 @@ static avl_node_t* BigRightRotate(avl_node_t* node)
 }
 
 //---------------------------------------------------------------------------------------
+
+static void DisconnectSon(avl_node_t* son)
+{
+
+    enum Side side = WhichSideIsSon(son);
+
+    if (side == UNKNOWN)
+        return;
+
+    if (side == LEFT)
+    {
+        son->upper->left = NULL;
+        son->upper       = NULL;
+    }
+    else
+    {
+        son->upper->right = NULL;
+        son->upper        = NULL;
+    }
+}
+
+// ---------------------------------------------------------------------
+
+static enum Side WhichSideIsSon(avl_node_t* son)
+{
+    if (son->upper == NULL)
+        return UNKNOWN;
+
+    assert(son->upper->left == son || son->upper->right == son);
+
+    if (son->upper->left == son)
+        return LEFT;
+
+    return RIGHT;
+}
+

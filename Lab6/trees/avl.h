@@ -18,6 +18,7 @@ typedef struct
 
 avl_tree_t* AVLTreeCtor();
 void        AVLTreeInsert(avl_tree_t* tree, const int key);
+void        AVLTreeRemove(avl_tree_t* tree, const int key);
 void        AVLTreeDtor(avl_tree_t* tree);
 
 void    PrintAVLTree(const avl_node_t* root);

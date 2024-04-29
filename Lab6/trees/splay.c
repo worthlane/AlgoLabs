@@ -11,6 +11,8 @@
 
 static double_splay_node_t* Split(splay_node_t* node, const int key);
 
+static splay_node_t*        Merge(double_splay_node_t* split);
+
 static splay_node_t*    NodeCtor(const int key, const splay_node_t* left, const splay_node_t* right, const splay_node_t* upper);
 static void             NodeDtor(splay_node_t* node);
 static splay_node_t*    InsertNode(splay_node_t* root, splay_node_t* node);
@@ -74,12 +76,15 @@ static void NodeDtor(splay_node_t* node)
 
 static void DestructSplayTree(splay_node_t* root)
 {
-	if (root == NULL)   return;
+	if (root == NULL)
+        return;
+
+    assert(root);
 
 	DestructSplayTree(root->left);
 	DestructSplayTree(root->right);
 
-	NodeDtor(root);
+	free(root);
 }
 
 // ---------------------------------------------------------------------
@@ -99,7 +104,9 @@ void SplayTreeInsert(splay_tree_t* tree, const int key)
 	assert(tree);
 
 	if (FindNode(tree, key))
-		return;
+    {
+        return;
+    }
 
 	splay_node_t* node = NodeCtor(key, NULL, NULL, NULL);
 	assert(node);
@@ -145,8 +152,6 @@ void PrintSplayTree(const splay_node_t* root)
 void SplayTreeDtor(splay_tree_t* tree)
 {
 	assert(tree);
-
-	DestructSplayTree(tree->root);
 
 	free(tree);
 };
@@ -386,4 +391,47 @@ static double_splay_node_t* Split(splay_node_t* root, const int key)
 		new_root->right->upper = NULL;
 
 	return ans;
+}
+
+// ---------------------------------------------------------------------
+
+static splay_node_t* Merge(double_splay_node_t* split)
+{
+    splay_node_t* max = split->first;
+
+    if (split->first == NULL)
+        return split->second;
+
+    if (split->second == NULL)
+        return split->first;
+
+    while (max->right != NULL)
+        max = max->right;
+
+    splay_node_t* new_root = Splay(split->first, max);
+
+    ConnectNodes(new_root, RIGHT, split->second);
+
+    new_root->upper = NULL;
+
+    return new_root;
+}
+
+// ---------------------------------------------------------------------
+
+void SplayTreeRemove(splay_tree_t* tree, const int key)
+{
+
+    splay_node_t* key_node = FindNode(tree, key);
+
+    if (key_node == NULL)
+    {
+        return;
+    }
+
+    splay_node_t* new_root = Splay(tree->root, key_node);
+
+    double_splay_node_t split = {new_root->left, new_root->right};
+
+    tree->root = Merge(&split);
 }

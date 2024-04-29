@@ -23,6 +23,7 @@ typedef struct double_splay_node_t
 
 splay_tree_t*   SplayTreeCtor();
 void            SplayTreeInsert(splay_tree_t* tree, const int key);
+void            SplayTreeRemove(splay_tree_t* tree, const int key);
 void            SplayTreeDtor(splay_tree_t* tree);
 
 void            PrintSplayTree(const splay_node_t* root);

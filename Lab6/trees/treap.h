@@ -24,8 +24,8 @@ typedef struct double_treap_node_t
 
 treap_t* TreapCtor();
 void     TreapDtor(treap_t* treap);
-void     TreapInsert(treap_t* treap, int key);
-void     TreapRemove(treap_t* treap, int key);
+void     TreapInsert(treap_t* treap, const int key);
+void     TreapRemove(treap_t* treap, const int key);
 void     PrintTreap(treap_node_t* root);
 
 #endif

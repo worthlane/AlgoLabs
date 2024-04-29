@@ -20,7 +20,7 @@ CXXFLAGS += -I $(HOME)
 BUILD_DIR = build/bin
 OBJECTS_DIR = build
 
-SOURCES = main.c
+SOURCES = main.c testing.c
 OBJECTS = $(SOURCES:%.c=$(OBJECTS_DIR)/%.o)
 
 TREE_DIR = trees
