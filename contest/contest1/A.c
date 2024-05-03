@@ -88,7 +88,7 @@ void HandleCommands(struct Stack_t* stk)
 	while (true)
 	{
 		char cmd[MAX_CMD_LEN] = {};
-		assert(scanf("%s", cmd));
+		assert(scanf("%15s", cmd));
 
 		int cmd_id = GetCommand(cmd);
 
@@ -152,8 +152,7 @@ void DoCommand(struct Stack_t* stk, const int cmd)
 	{
 		int value = 0;
 
-		if (!scanf("%d", &value))
-			abort();
+		assert(scanf("%d", &value));
 
 		StackPush(stk, value);
 		printf("ok\n");
@@ -166,7 +165,7 @@ void DoCommand(struct Stack_t* stk, const int cmd)
 		printf("bye\n");
 		break;
 	default:
-		abort();
+		return;
 	}
 }
 
@@ -181,8 +180,7 @@ void StackCtor(struct Stack_t* stk, const size_t capacity)
 
 	data = (struct Elem_t*) calloc(data_size, 1);
 
-	if (data == NULL)
-		abort();
+	assert(data);
 
 	stk->data     = data;
 	stk->size     = 0;
@@ -305,8 +303,7 @@ void StackClear(struct Stack_t* stk)
 {
 	assert(stk);
 
-	StackDtor(stk);
-	StackCtor(stk, MIN_CAPACITY);
+	stk->size = 0;
 }
 
 // ---------------------------------------------------------------------
