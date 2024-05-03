@@ -38,44 +38,44 @@ static int Median(int* array, const int a, const int b, const int c)
 
 static int PivotsPartition(int* array, const int l, const int r, int take_pivot(int*, const int, const int))
 {
-	int pivot   = take_pivot(array, l, r);
-	int i = l;
-	int j = r;
+    int pivot   = take_pivot(array, l, r);
+    int i = l;
+    int j = r;
 
-	while (i <= j)
-	{
-		while (array[i] < pivot) { i++; }
-		while (array[j] > pivot) { j--; }
-		if (i >= j)
-			return j;
+    while (i <= j)
+    {
+        while (array[i] < pivot) { i++; }
+        while (array[j] > pivot) { j--; }
+        if (i >= j)
+            return j;
 
-		Swap(&array[i++], &array[j--]);
-	}
+        Swap(&array[i++], &array[j--]);
+    }
 
-	return j;
+    return j;
 }
 
 //-------------------------------------------------------------------------------------------
 
 static void PivotsQSort(int* array, const size_t left, const size_t right, int take_pivot(int*, const int, const int))
 {
-	assert(array);
+    assert(array);
 
-	if (left < right)
-	{
-		if (right - left == 1)
-		{
-			if (array[right] < array[left])
-				Swap(&array[right], &array[left]);
-		}
-		else
-		{
-			int mid = PivotsPartition(array, left, right, take_pivot);
+    if (left < right)
+    {
+        if (right - left == 1)
+        {
+            if (array[right] < array[left])
+                Swap(&array[right], &array[left]);
+        }
+        else
+        {
+            int mid = PivotsPartition(array, left, right, take_pivot);
 
-			PivotsQSort(array, left, mid, take_pivot);
-			PivotsQSort(array, mid + 1, right, take_pivot);
-		}
-	}
+            PivotsQSort(array, left, mid, take_pivot);
+            PivotsQSort(array, mid + 1, right, take_pivot);
+        }
+    }
 }
 
 //-------------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@ static int CentralPivot(int* array, const int l, const int r)
     assert(array);
 
     int piv_idx = l + (r - l) / 2;
-	return array[piv_idx];
+    return array[piv_idx];
 }
 
 //-------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ static int MedianThreePivot(int* array, const int l, const int r)
 
     int piv_idx = Median(array, l, mid, r);
 
-	return array[piv_idx];
+    return array[piv_idx];
 }
 
 //-------------------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ static int RandPivot(int* array, const int l, const int r)
 
     int piv_idx = (rand() % (r - l)) + l;
 
-	return array[piv_idx];
+    return array[piv_idx];
 }
 
 //-------------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ static int RandMedianPivot(int* array, const int l, const int r)
 
     int piv_idx = Median(array, elem1, elem2, elem3);
 
-	return array[piv_idx];
+    return array[piv_idx];
 }
 
 //-------------------------------------------------------------------------------------------

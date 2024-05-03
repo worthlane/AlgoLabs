@@ -22,13 +22,13 @@ int* GetArray(const char* input_file)
     }
 
     size_t size = 0;
-    fscanf(fp, "%zu", &size);
+    assert(fscanf(fp, "%zu", &size));
 
     int* array = (int*) calloc(size, sizeof(int));
     assert(array);
 
     for (size_t i = 0; i < size; i++)
-        fscanf(fp, "%d", &array[i]);
+        assert(fscanf(fp, "%d", &array[i]));
 
     fclose(fp);
 
@@ -114,6 +114,7 @@ double* TestSort(const int from, const int to, const int step,
             snprintf(ans, MAX_FILE_NAME, "%s%zu_%zu.out", src_path, size, i);       // creating answer file name
 
             ValidateArray(ans, arr, size);
+            free(arr);
 
             duration += end - start;
         }
@@ -176,6 +177,7 @@ double* TestPyramidSort(const int from, const int to, const int step,
             snprintf(ans, MAX_FILE_NAME, "%s%zu_%zu.out", src_path, size, i);       // creating answer file name
 
             ValidateArray(ans, arr, size);
+            free(arr);
 
             duration += end - start;
         }

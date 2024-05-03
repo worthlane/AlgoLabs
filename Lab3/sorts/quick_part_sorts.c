@@ -25,22 +25,22 @@ static int Comparator(const void* a, const void* b)
 static void HoarePartition(int* array, int l, int r, int* mid1, int* mid2)
 // We return values through two parameters to standardize the Partition function (due to fat partitioning)
 {
-	int piv_idx = l + (r - l) / 2;
-	int pivot   = array[piv_idx];
-	int i = l;
-	int j = r;
+    int piv_idx = l + (r - l) / 2;
+    int pivot   = array[piv_idx];
+    int i = l;
+    int j = r;
 
-	while (i <= j)
-	{
-		while (array[i] < pivot) { i++; }
-		while (array[j] > pivot) { j--; }
-		if (i >= j)
-			break;
+    while (i <= j)
+    {
+        while (array[i] < pivot) { i++; }
+        while (array[j] > pivot) { j--; }
+        if (i >= j)
+            break;
 
-		Swap(&array[i++], &array[j--]);
-	}
+        Swap(&array[i++], &array[j--]);
+    }
 
-	*mid1 = j;
+    *mid1 = j;
     *mid2 = j + 1;
 }
 
@@ -48,8 +48,8 @@ static void HoarePartition(int* array, int l, int r, int* mid1, int* mid2)
 
 static void FatPartition(int* array, int l, int r, int* eq_from, int* eq_to)
 {
-	int piv_idx = l + (r - l) / 2;
-	int pivot   = array[piv_idx];
+    int piv_idx = l + (r - l) / 2;
+    int pivot   = array[piv_idx];
 
     int mid = l;
 
@@ -72,12 +72,12 @@ static void FatPartition(int* array, int l, int r, int* eq_from, int* eq_to)
 static void LomutoPartition(int* array, int l, int r, int* mid1, int* mid2)
 // We return values through two parameters to standardize the Partition function (due to fat partitioning)
 {
-	int piv_idx = l + (r - l) / 2;
-	int pivot   = array[piv_idx];
+    int piv_idx = l + (r - l) / 2;
+    int pivot   = array[piv_idx];
 
     Swap(&array[r], &array[piv_idx]);
 
-	int i = l;
+    int i = l;
 
     for (size_t j = l; j <= r; j++)
     {
@@ -124,26 +124,26 @@ static void OneBranchQSort(int* array, size_t left, size_t right,
 static void QSort(int* array, size_t left, size_t right,
                     void partition(int* array, int l, int r, int* eq_from, int* eq_to))
 {
-	assert(array);
+    assert(array);
 
-	if (left < right)
-	{
-		if (right - left == 1)
-		{
-			if (array[right] < array[left])
-				Swap(&array[right], &array[left]);
-		}
-		else
-		{
-			int eq_from = 0;
+    if (left < right)
+    {
+        if (right - left == 1)
+        {
+            if (array[right] < array[left])
+                Swap(&array[right], &array[left]);
+        }
+        else
+        {
+            int eq_from = 0;
             int eq_to   = 0;
 
-			partition(array, left, right, &eq_from, &eq_to);
+            partition(array, left, right, &eq_from, &eq_to);
 
-			QSort(array, left, eq_from, partition);
-			QSort(array, eq_to, right, partition);
-		}
-	}
+            QSort(array, left, eq_from, partition);
+            QSort(array, eq_to, right, partition);
+        }
+    }
 }
 
 //-------------------------------------------------------------------------------------------

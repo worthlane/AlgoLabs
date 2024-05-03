@@ -55,9 +55,6 @@ static void TestQuickPartitions(const int from, const int to, const int step,
 
 int main(const int argc, const char* argv[])
 {
-
-    GetNinethPointData();
-
     return 0;
 }
 

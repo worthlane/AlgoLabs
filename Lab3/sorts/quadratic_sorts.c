@@ -50,11 +50,15 @@ void Selection_sort(int* arr, const size_t n)
 
     for (size_t i = 0; i < n; i++)
     {
+        size_t min = i;
+
         for (size_t j = i + 1; j < n; j++)
         {
-            if (arr[i] > arr[j])
-                Swap(&arr[i], &arr[j]);
+            if (arr[min] > arr[j])
+                min = j;
         }
+
+        Swap(&arr[i], &arr[min]);
     }
 }
 

@@ -3,10 +3,8 @@
 #include <math.h>
 
 #include "common.h"
-
 #include "quadratic_sorts.h"
 #include "pyramid_sorts.h"
-
 #include "intro_sorts.h"
 
 static int Partition(int* array, const int l, const int r);
@@ -17,31 +15,31 @@ static void IntroQuickSort(int* array, const size_t left, const size_t right, co
 
 static int Partition(int* array, const int l, const int r)
 {
-	int piv_idx = l + (r - l) / 2;
-	int pivot   = array[piv_idx];                   // Central pivot strategy
-	int i = l;
-	int j = r;
+    int piv_idx = l + (r - l) / 2;
+    int pivot   = array[piv_idx];                   // Central pivot strategy
+    int i = l;
+    int j = r;
 
-	while (i <= j)
-	{
-		while (array[i] < pivot) { i++; }
-		while (array[j] > pivot) { j--; }
-		if (i >= j)
-			break;
+    while (i <= j)
+    {
+        while (array[i] < pivot) { i++; }
+        while (array[j] > pivot) { j--; }
+        if (i >= j)
+            break;
 
-		Swap(&array[i++], &array[j--]);
-	}
+        Swap(&array[i++], &array[j--]);
+    }
 
-	return j;
+    return j;
 }
 
 //-------------------------------------------------------------------------------------------
 
 static void IntroQuickSort(int* array, const size_t left, const size_t right, const size_t depth)
 {
-	assert(array);
+    assert(array);
 
-	if (right <= left)		return;
+    if (right <= left)		return;
 
     size_t size = right - left;
 
@@ -51,10 +49,10 @@ static void IntroQuickSort(int* array, const size_t left, const size_t right, co
     if (depth == 0)
         Pyramid_sort(array + left, size, OPTIMAL_HEAP_K);            // heapsort with multiplicity 2 is the fastest
 
-	int mid = Partition(array, left, right);
+    int mid = Partition(array, left, right);
 
-	IntroQuickSort(array, left, mid, depth - 1);
-	IntroQuickSort(array, mid + 1, right, depth - 1);
+    IntroQuickSort(array, left, mid, depth - 1);
+    IntroQuickSort(array, mid + 1, right, depth - 1);
 }
 
 //-------------------------------------------------------------------------------------------

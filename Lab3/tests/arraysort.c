@@ -15,7 +15,7 @@ int main(const int argc, const char* argv[])
     unsigned int* array = (unsigned int*) calloc(array_len, sizeof(unsigned int));
 
     for (size_t i = 0; i < array_len; i++)
-        scanf("%i", &array[i]);
+        assert(scanf("%i", &array[i]));
 
     qsort(array, array_len, sizeof(unsigned int), Comparator);
 
