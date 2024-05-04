@@ -130,7 +130,9 @@ static size_t GetQuadraticAddress(opened_map_t* table, const int key)
 
         i++;
 
-        index = (hash + i + i*i) % (table->cap);
+        index += i;
+
+        index = index % (table->cap);
     }
     while (true);
 }
@@ -192,7 +194,7 @@ static void OpenedMapResize(opened_map_t* table)
 
     size_t cur_table_cap = table->cap;
 
-    opened_map_t* new_map = OpenedMapCtor(cur_table_cap + 1, table->address, table->load_factor);
+    opened_map_t* new_map = OpenedMapCtor(cur_table_cap * 2, table->address, table->load_factor);
     assert(new_map);
 
     map_elem_t elem = {};

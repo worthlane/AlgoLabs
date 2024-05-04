@@ -214,7 +214,7 @@ static void ListedMapResize(listed_map_t* table)
 
     size_t cur_table_cap = table->cap;
 
-    listed_map_t* new_map = ListedMapCtor(cur_table_cap + 1, table->load_factor);
+    listed_map_t* new_map = ListedMapCtor(cur_table_cap * 2, table->load_factor);
     assert(new_map);
 
 	list_elem_t* cur_elem = NULL;
