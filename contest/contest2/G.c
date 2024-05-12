@@ -35,8 +35,8 @@ typedef struct double_node_t
 	node_t* second;
 } double_node_t;
 
-node_t* NodeCtor(int prior, int key, int size, node_t* left, node_t* right, node_t* upper);
-void    NodeFill(node_t* node, int prior, int key, int size, node_t* left, node_t* right, node_t* upper);
+node_t* NodeCtor(int priority, int key, int size, node_t* left, node_t* right, node_t* upper);
+void    NodeFill(node_t* node, int priority, int key, int size, node_t* left, node_t* right, node_t* upper);
 
 treap_t* TreapCtor();
 void     TreapDtor(treap_t* treap);
@@ -84,7 +84,7 @@ typedef enum {
 	UNKNOWN,
 } command_t;
 
-void GetCommand();
+void HandleCommands(treap_t* treap);
 command_t DefineCommand(char* cmd);
 
 // =====================================================================
@@ -93,44 +93,46 @@ int main()
 {
 	srand(time(NULL));
 
-	GetCommand();
+	treap_t* treap = TreapCtor();
+
+	HandleCommands(treap);
+
+	TreapDtor(treap);
 
 	return 0;
 }
 
 // ---------------------------------------------------------------------
 
-void GetCommand()
+void HandleCommands(treap_t* treap)
 {
+	assert(treap);
+
 	char cmd[MAX_WORD_LEN] = {};
 	int  x = 0;
 	command_t command_code = UNKNOWN;
 
-	treap_t* treap = TreapCtor();
-	assert(treap);
-
 	while (true)
 	{
-		if(scanf("%s", cmd) != 1)
+		if(scanf("%19s", cmd) != 1)
 			return;
+
+		assert(scanf("%d", &x));
 
 		command_code = DefineCommand(cmd);
 
 		switch (command_code)
 		{
 		case (INSERT):
-			assert(scanf("%d", &x));
 			TreapInsert(treap, x);
 			break;
 
 		case (DELETE):
-			assert(scanf("%d", &x));
 			TreapRemove(treap, x);
 			break;
 
 		case (EXISTS):
 		{
-			assert(scanf("%d", &x));
 			node_t* node = FindNode(treap, x);
 			if (node == NULL)
 				printf("false\n");
@@ -141,7 +143,6 @@ void GetCommand()
 
 		case (NEXT):
 		{
-			assert(scanf("%d", &x));
 			int num = TreapNext(treap, x);
 			if (num == NEXT_NONE)
 				printf("none\n");
@@ -153,7 +154,6 @@ void GetCommand()
 
 		case (PREV):
 		{
-			assert(scanf("%d", &x));
 			int num = TreapPrev(treap, x);
 			if (num == PREV_NONE)
 				printf("none\n");
@@ -164,7 +164,6 @@ void GetCommand()
 
 		case (KTH):
 		{
-			assert(scanf("%d", &x));
 			int num = GetKth(treap->root, x + 1);   // +1 cuz of numeration from zero
 			if (num == KTH_NONE)
 				printf("none\n");
@@ -174,12 +173,9 @@ void GetCommand()
 		}
 
 		default:
-			TreapDtor(treap);
 			return;
 		}
 	}
-
-	TreapDtor(treap);
 }
 
 // ---------------------------------------------------------------------
@@ -212,12 +208,12 @@ command_t DefineCommand(char* cmd)
 
 // ---------------------------------------------------------------------
 
-node_t* NodeCtor(int prior, int key, int size, node_t* left, node_t* right, node_t* upper)
+node_t* NodeCtor(int priority, int key, int size, node_t* left, node_t* right, node_t* upper)
 {
 	node_t* node = (node_t*) calloc(1, sizeof(node_t));
 	assert(node);
 
-	node->priority = prior;
+	node->priority = priority;
 	node->key      = key;
 	node->left     = left;
 	node->right    = right;
@@ -229,14 +225,14 @@ node_t* NodeCtor(int prior, int key, int size, node_t* left, node_t* right, node
 
 // ---------------------------------------------------------------------
 
-void NodeFill(node_t* node, int prior, int key, int size, node_t* left, node_t* right, node_t* upper)
+void NodeFill(node_t* node, int priority, int key, int size, node_t* left, node_t* right, node_t* upper)
 {
 	assert(node);
 
 	node->left     = left;
 	node->right    = right;
 	node->key      = key;
-	node->priority = prior;
+	node->priority = priority;
 	node->upper    = upper;
 	node->size     = size;
 }
@@ -273,9 +269,9 @@ void TreapInsert(treap_t* treap, int key)
 	if (FindNode(treap, key))
 		return;
 
-	int prior = rand();
+	int priority = rand();
 
-	node_t* node = NodeCtor(prior, key, 0, NULL, NULL, NULL);
+	node_t* node = NodeCtor(priority, key, 0, NULL, NULL, NULL);
 	assert(node);
 
 	if (treap->root == NULL)
@@ -327,36 +323,36 @@ void TreapRemove(treap_t* treap, int key)
 
 double_node_t* Split(node_t* treap, int x)
 {
-	double_node_t* ans = calloc(1, sizeof(double_node_t));
-	assert(ans);
+	double_node_t* splitted_nodes = calloc(1, sizeof(double_node_t));
+	assert(splitted_nodes);
 
 	if (treap == NULL)
 	{
-		ans->first = NULL;
-		ans->second = NULL;
+		splitted_nodes->first = NULL;
+		splitted_nodes->second = NULL;
 	}
 	else if (x < treap->key)
 	{
-		double_node_t* ans2 = Split(treap->left, x);
-		ConnectNodes(treap, ans2->second, LEFT);
+		double_node_t* splitted_subtree = Split(treap->left, x);
+		ConnectNodes(treap, splitted_subtree->second, LEFT);
 
-		ans->first  = ans2->first;
-		ans->second = treap;
+		splitted_nodes->first  = splitted_subtree->first;
+		splitted_nodes->second = treap;
 
-		free(ans2);
+		free(splitted_subtree);
 	}
 	else
 	{
-		double_node_t* ans2 = Split(treap->right, x);
-		ConnectNodes(treap, ans2->first, RIGHT);
+		double_node_t* splitted_subtree = Split(treap->right, x);
+		ConnectNodes(treap, splitted_subtree->first, RIGHT);
 
-		ans->first  = treap;
-		ans->second = ans2->second;
+		splitted_nodes->first  = treap;
+		splitted_nodes->second = splitted_subtree->second;
 
-		free(ans2);
+		free(splitted_subtree);
 	}
 
-	return ans;
+	return splitted_nodes;
 }
 
 // ---------------------------------------------------------------------
@@ -383,39 +379,39 @@ node_t* Merge(node_t* first, node_t* second)
 
 node_t* FindNode(treap_t* treap, int x)
 {
-	node_t* cur = treap->root;
+	node_t* current = treap->root;
 
-	while (cur != NULL)
+	while (current != NULL)
 	{
-		if (cur->key == x)
-			return cur;
+		if (current->key == x)
+			return current;
 
-		if (cur->key > x)
-			cur = cur->left;
+		if (current->key > x)
+			current = current->left;
 		else
-			cur = cur->right;
+			current = current->right;
 	}
 
-	return cur;
+	return current;
 }
 
 // ---------------------------------------------------------------------
 
 int TreapNext(treap_t* treap, int x)
 {
-	node_t* cur = treap->root;
+	node_t* current = treap->root;
 
 	int min = NEXT_NONE;
 
-	while (cur != NULL)
+	while (current != NULL)
 	{
-		if (cur->key > x)
+		if (current->key > x)
 		{
-			min = Min(min, cur->key);
-			cur = cur->left;
+			min = Min(min, current->key);
+			current = current->left;
 		}
 		else
-			cur = cur->right;
+			current = current->right;
 	}
 
 	return min;
@@ -425,20 +421,20 @@ int TreapNext(treap_t* treap, int x)
 
 int TreapPrev(treap_t* treap, int x)
 {
-	node_t* cur = treap->root;
+	node_t* current = treap->root;
 
 	int max = PREV_NONE;
 
-	while (cur != NULL)
+	while (current != NULL)
 	{
 
-		if (cur->key < x)
+		if (current->key < x)
 		{
-			max = Max(max, cur->key);
-			cur = cur->right;
+			max = Max(max, current->key);
+			current = current->right;
 		}
 		else
-			cur = cur->left;
+			current = current->left;
 	}
 
 	return max;
