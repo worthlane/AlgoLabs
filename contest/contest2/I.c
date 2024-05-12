@@ -85,6 +85,9 @@ static inline void SkipSpaces()
 	ungetc(ch, stdin);
 }
 
+void FillTrees(tree_t* name_tree, tree_t* surname_tree, const size_t N);
+void FindWords(tree_t* name_tree, tree_t* surname_tree, const size_t cmd_amt);
+
 // =====================================================================
 
 int main()
@@ -97,25 +100,44 @@ int main()
 	size_t N = 0;
 	assert(scanf("%lu", &N));
 
+	FillTrees(name_tree, surname_tree, N);
+
+	size_t cmd_amt = 0;
+	assert(scanf("%lu", &cmd_amt));
+
+	FindWords(name_tree, surname_tree, cmd_amt);
+
+	TreeDtor(name_tree);
+	TreeDtor(surname_tree);
+
+	return 0;
+}
+
+// --------------------------------------------------------------------
+
+void FillTrees(tree_t* name_tree, tree_t* surname_tree, const size_t N)
+{
 	char name[MAX_WORD_LEN] = {};
 	char surname[MAX_WORD_LEN] = {};
 
 	for (size_t i = 0; i < N; i++)
 	{
-		assert(scanf("%s%s", name, surname));
+		assert(scanf("%499s%499s", name, surname));
 
 		TreeInsert(name_tree, name, surname);
 		TreeInsert(surname_tree, surname, name);
 	}
+}
 
-	size_t cmd_amt = 0;
-	assert(scanf("%lu", &cmd_amt));
+// --------------------------------------------------------------------
 
+void FindWords(tree_t* name_tree, tree_t* surname_tree, const size_t cmd_amt)
+{
 	char word[MAX_WORD_LEN] = {};
 
 	for (size_t i = 0; i < cmd_amt; i++)
 	{
-		assert(scanf("%s", word));
+		assert(scanf("%499s", word));
 
 		node_t* node = FindNode(surname_tree, word);
 
@@ -127,12 +149,8 @@ int main()
 
 		printf("%s\n", node->val);
 	}
-
-	TreeDtor(name_tree);
-	TreeDtor(surname_tree);
-
-	return 0;
 }
+
 
 
 // ---------------------------------------------------------------------
