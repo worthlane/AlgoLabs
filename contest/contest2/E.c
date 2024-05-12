@@ -7,6 +7,10 @@
 #include <ctype.h>
 #include <time.h>
 
+/*! \file
+* \brief contains avl tree task
+*/
+
 typedef struct node_t {
 	struct node_t* upper;
 
@@ -22,8 +26,37 @@ typedef struct
 	node_t* root;
 } tree_t;
 
+/************************************************************//**
+ * @brief creates tree node
+ *
+ * @param[in] key node key
+ * @param[in] height subtree height
+ * @param[in] left node left son
+ * @param[in] right node right son
+ * @param[in] upper node parent
+
+* @param[out] node created node
+ ************************************************************/
 node_t* NodeCtor(const int key, const int height, const node_t* left, const node_t* right, const node_t* upper);
+
+/************************************************************//**
+ * @brief fills node with values
+ *
+ * @param[in] node filling node
+ * @param[in] key node key
+ * @param[in] height subtree height
+ * @param[in] left node left son
+ * @param[in] right node right son
+ * @param[in] upper node parent
+ ************************************************************/
 void    NodeFill(node_t* node, const int key, const int height, const node_t* left, const node_t* right, const node_t* upper);
+
+/************************************************************//**
+ * @brief inserts node in root's subtree
+ *
+ * @param[in] root root
+ * @param[in] node inserting node
+ ************************************************************/
 node_t* InsertNode(node_t* root, node_t* node);
 
 enum Side
@@ -32,35 +65,154 @@ enum Side
 	LEFT,
 };
 
+/************************************************************//**
+ * @brief connects node as son
+ *
+ * @param[in] parent parent
+ * @param[in] side son's side
+ * @param[in] son son
+ ************************************************************/
 void ConnectNodes(node_t* parent, const enum Side side, node_t* son);
 
 static const int NEXT_MIN_START = 2147483647;
 static const int NONE = -1;
 
+/************************************************************//**
+ * @brief creates tree
+ *
+ * @param[out] tree
+ ************************************************************/
 tree_t* TreeCtor();
+
+/************************************************************//**
+ * @brief inserts key in tree
+ *
+ * @param[in] tree tree
+ * @param[in] key key
+ ************************************************************/
 void    TreeInsert(tree_t* tree, const int key);
+
+/************************************************************//**
+ * @brief destructs avl-tree
+ *
+ * @param[in] tree tree
+ ************************************************************/
 void    TreeDtor(tree_t* tree);
+
+/************************************************************//**
+ * @brief gets the next key in tree
+ *
+ * @param[in] tree tree
+ * @param[in] x key
+ *
+ * @param[out] next_key
+ ************************************************************/
 int     TreeNext(tree_t* tree, const int x);
 
+/************************************************************//**
+ * @brief calculates node's height
+ *
+ * @param[in] node node
+ *
+ * @param[out] node_height
+ ************************************************************/
 int    GetHeight(node_t* node);
+
+/************************************************************//**
+ * @brief calculates node's balance
+ *
+ * @param[in] node node
+ *
+ * @param[out] node_balance
+ ************************************************************/
 int    GetBalance(node_t* node);
 
+/************************************************************//**
+ * @brief does left rotate
+ *
+ * @param[in] node node
+ *
+ * @param[out] new_subtree_root
+ ************************************************************/
 node_t*    LeftRotate(node_t* node);
+
+/************************************************************//**
+ * @brief does right rotate
+ *
+ * @param[in] node node
+ *
+ * @param[out] new_subtree_root
+ ************************************************************/
 node_t*    RightRotate(node_t* node);
+
+/************************************************************//**
+ * @brief does big left rotate
+ *
+ * @param[in] node node
+ *
+ * @param[out] new_subtree_root
+ ************************************************************/
 node_t*    BigLeftRotate(node_t* node);
+
+/************************************************************//**
+ * @brief does big right rotate
+ *
+ * @param[in] node node
+ *
+ * @param[out] new_subtree_root
+ ************************************************************/
 node_t*    BigRightRotate(node_t* node);
 
+/************************************************************//**
+ * @brief balances heights of node's subtrees
+ *
+ * @param[in] node node
+ *
+ * @param[out] subtrees_root
+ ************************************************************/
 node_t* BalanceNode(node_t* node);
 
+/************************************************************//**
+ * @brief finds node in tree
+ *
+ * @param[in] tree tree
+ * @param[in] x finding node's key
+ *
+ * @param[out] found_node
+ ************************************************************/
 node_t* FindNode(tree_t* tree, const int x);
 
+/************************************************************//**
+ * @brief prints tree in stdout
+ *
+ * @param[in] root root
+ ************************************************************/
 void PrintTree(const node_t* root);
+
+/************************************************************//**
+ * @brief recursively destructs tree from the root
+ *
+ * @param[in] root root
+ ************************************************************/
 void DestructTree(node_t* root);
 
+/************************************************************//**
+ * @brief updates node's height
+ *
+ * @param[in] node node
+ ************************************************************/
 void UpdateHeight(node_t* node);
 
+/************************************************************//**
+ * @brief gets commands from stdin
+ *
+ * @param[in] N commands amount
+ ************************************************************/
 void GetCommands(size_t N);
 
+/************************************************************//**
+ * @brief skips all space symbols in stdin
+ ************************************************************/
 static inline void SkipSpaces()
 {
 	char ch = getc(stdin);
@@ -71,11 +223,27 @@ static inline void SkipSpaces()
 	ungetc(ch, stdin);
 }
 
+/************************************************************//**
+ * @brief gets minimum of two numbers
+ *
+ * @param[in] a first number
+ * @param[in] b second number
+ *
+ * @param[out] minimum
+ ************************************************************/
 static inline int Min(const int a, const int b)
 {
 	return (a > b) ? b : a;
 }
 
+/************************************************************//**
+ * @brief gets maximum of two numbers
+ *
+ * @param[in] a first number
+ * @param[in] b second number
+ *
+ * @param[out] maximum
+ ************************************************************/
 static inline int Max(const int a, const int b)
 {
 	return (a < b) ? b : a;
@@ -109,7 +277,7 @@ void GetCommands(size_t N)
 
 		int ch = 0;
 		int key = 0;
-		scanf("%c%d", &ch, &key);
+		assert(scanf("%c%d", &ch, &key));
 
 		switch (ch)
 		{
