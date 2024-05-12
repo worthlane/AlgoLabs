@@ -39,14 +39,14 @@ void       FillMap(hashmap_t* map, const int* keys, const size_t size);
 static const int A_STD = 0;
 static const int B_STD = 0;
 
-static int PRIMES[] = { 1, 7, 19, 37, 61, 127, 271, 331, 397, 547, 631,
-                        919, 1657, 1801, 1951, 2269, 2437, 2791, 3169,
-                        3571, 4219, 4447, 5167, 5419, 6211, 7057, 7351, 8269,
-                        9241, 10267, 11719, 12097, 13267, 13669, 16651, 19441,
-                        19927, 22447, 23497, 24571, 25117, 26227, 27361, 33391, 35317,
-                        37633, 43201, 47629, 60493, 63949, 65713, 69313, 73009, 76801,
-                        84673, 106033, 108301, 112909, 1152491,196613,
-                       393241,786433,1572869,3145739,6291469,12582917 };
+static const int PRIMES[] = { 	1, 7, 19, 37, 61, 127, 271, 331, 397, 547, 631,
+								919, 1657, 1801, 1951, 2269, 2437, 2791, 3169,
+								3571, 4219, 4447, 5167, 5419, 6211, 7057, 7351, 8269,
+								9241, 10267, 11719, 12097, 13267, 13669, 16651, 19441,
+								19927, 22447, 23497, 24571, 25117, 26227, 27361, 33391, 35317,
+								37633, 43201, 47629, 60493, 63949, 65713, 69313, 73009, 76801,
+								84673, 106033, 108301, 112909, 1152491,196613,
+								393241,786433,1572869,3145739,6291469,12582917 };
 
 static const int PRIMES_AMT = sizeof(PRIMES) / sizeof(*PRIMES);
 
@@ -97,9 +97,12 @@ int main()
 	srand(time(NULL));
 
 	size_t N = 0;
-	assert(scanf("%lu", &N));
+	int read = scanf("%lu", &N);
+	if (!read)
+		return 1;
 
 	int* keys = GetArray(N);
+	assert(keys);
 
 	hashmap_t* map = HashmapCtor(keys, N);
 
@@ -110,7 +113,10 @@ int main()
 		if (!scanf("%d", &key))
 		{
 			char ch = 0;
-			scanf("%c", &ch);
+
+			int read_ch = scanf("%c", &ch);
+			if (!read_ch)
+				return 1;
 
 			if (ch == '.')
 				break;
@@ -138,10 +144,14 @@ int main()
 int* GetArray(const size_t size)
 {
 	int* array = calloc(size, sizeof(int));
+	assert(array);
 
+	int read = 0;
 	for (size_t i = 0; i < size; i++)
 	{
-		assert(scanf("%d", &array[i]));
+		read = scanf("%d", &array[i]);
+		if (!read)
+			return NULL;
 	}
 
 	return array;
@@ -220,6 +230,8 @@ void ChooseMapHash(hashmap_t* map, const int* keys, const size_t size)
 	int* amt = calloc(map->size, sizeof(int));
 	assert(amt);
 
+	static const int MAX_FILLING_COEF = 4;
+
 	while (true)
 	{
 		int a = PRIMES[rand() % PRIMES_AMT];
@@ -238,7 +250,7 @@ void ChooseMapHash(hashmap_t* map, const int* keys, const size_t size)
 			delta_sum += amt[i];
 		}
 
-		if (delta_sum <= size * 4)
+		if (delta_sum <= size * MAX_FILLING_COEF)
 		{
 			map->a_hash = a;
 			map->b_hash = b;
