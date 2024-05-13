@@ -24,6 +24,41 @@ typedef struct
 	node_t* root;
 } tree_t;
 
+tree_t* TreeCtor();
+void    TreeDtor(tree_t* tree);
+
+void FillTrees(tree_t* name_tree, tree_t* surname_tree, const size_t N);
+void FindWords(tree_t* name_tree, tree_t* surname_tree, const size_t cmd_amt);
+
+// =====================================================================
+
+int main()
+{
+	srand(time(NULL));
+
+	tree_t* name_tree = TreeCtor();
+	tree_t* surname_tree = TreeCtor();
+
+	size_t N = 0;
+	if(!scanf("%lu", &N))
+		return 1;
+
+	FillTrees(name_tree, surname_tree, N);
+
+	size_t cmd_amt = 0;
+	if(!scanf("%lu", &cmd_amt))
+		return 1;
+
+	FindWords(name_tree, surname_tree, cmd_amt);
+
+	TreeDtor(name_tree);
+	TreeDtor(surname_tree);
+
+	return 0;
+}
+
+// --------------------------------------------------------------------
+
 typedef struct double_node_t
 {
 	node_t* first;
@@ -46,21 +81,6 @@ void ConnectNodes(node_t* parent, const enum Side side, node_t* son);
 
 static const int NEXT_MIN_START = 2147483647;
 static const int NONE = -1;
-
-tree_t* TreeCtor();
-void    TreeInsert(tree_t* tree, char key[MAX_WORD_LEN], char val[MAX_WORD_LEN]);
-void    TreeDtor(tree_t* tree);
-
-node_t*    LeftZig(node_t* node);
-node_t*    RightZig(node_t* node);
-node_t*    LeftRightZigZag(node_t* node);
-node_t*    RightLeftZigZag(node_t* node);
-node_t*    RightZigZig(node_t* node);
-node_t*    LeftZigZig(node_t* node);
-node_t*    Splay(node_t* root, node_t* node);
-
-node_t* FindNode(tree_t* tree, char key[MAX_WORD_LEN]);
-node_t* TreePrev(node_t* root, char key[MAX_WORD_LEN]);
 
 void PrintTree(const node_t* root);
 void DestructTree(node_t* root);
@@ -85,33 +105,18 @@ static inline void SkipSpaces()
 	ungetc(ch, stdin);
 }
 
-void FillTrees(tree_t* name_tree, tree_t* surname_tree, const size_t N);
-void FindWords(tree_t* name_tree, tree_t* surname_tree, const size_t cmd_amt);
+node_t*    LeftZig(node_t* node);
+node_t*    RightZig(node_t* node);
+node_t*    LeftRightZigZag(node_t* node);
+node_t*    RightLeftZigZag(node_t* node);
+node_t*    RightZigZig(node_t* node);
+node_t*    LeftZigZig(node_t* node);
+node_t*    Splay(node_t* root, node_t* node);
 
-// =====================================================================
+node_t* FindNode(tree_t* tree, char key[MAX_WORD_LEN]);
+node_t* TreePrev(node_t* root, char key[MAX_WORD_LEN]);
 
-int main()
-{
-	srand(time(NULL));
-
-	tree_t* name_tree = TreeCtor();
-	tree_t* surname_tree = TreeCtor();
-
-	size_t N = 0;
-	assert(scanf("%lu", &N));
-
-	FillTrees(name_tree, surname_tree, N);
-
-	size_t cmd_amt = 0;
-	assert(scanf("%lu", &cmd_amt));
-
-	FindWords(name_tree, surname_tree, cmd_amt);
-
-	TreeDtor(name_tree);
-	TreeDtor(surname_tree);
-
-	return 0;
-}
+void    TreeInsert(tree_t* tree, char key[MAX_WORD_LEN], char val[MAX_WORD_LEN]);
 
 // --------------------------------------------------------------------
 
@@ -122,7 +127,8 @@ void FillTrees(tree_t* name_tree, tree_t* surname_tree, const size_t N)
 
 	for (size_t i = 0; i < N; i++)
 	{
-		assert(scanf("%499s%499s", name, surname));
+		if(!scanf("%499s%499s", name, surname))
+			return;
 
 		TreeInsert(name_tree, name, surname);
 		TreeInsert(surname_tree, surname, name);
@@ -137,7 +143,8 @@ void FindWords(tree_t* name_tree, tree_t* surname_tree, const size_t cmd_amt)
 
 	for (size_t i = 0; i < cmd_amt; i++)
 	{
-		assert(scanf("%499s", word));
+		if(!scanf("%499s", word))
+			return;
 
 		node_t* node = FindNode(surname_tree, word);
 
