@@ -130,7 +130,7 @@ static void ChooseMapHash(ideal_map_t* map, const int* keys, const size_t size)
 
 		for (size_t i = 0; i < map->size; i++)
 		{
-			delta_sum += amt[i];
+			delta_sum += amt[i] * amt[i];
 		}
 
 		if (delta_sum <= size * 4)
@@ -146,7 +146,7 @@ static void ChooseMapHash(ideal_map_t* map, const int* keys, const size_t size)
 	for (size_t i = 0; i < map->size; i++)
 	{
 		if (amt[i] != 0)
-			map->tables[i] = TableCtor(amt[i]);
+			map->tables[i] = TableCtor(amt[i] * amt[i]);
 	}
 
 	free(amt);

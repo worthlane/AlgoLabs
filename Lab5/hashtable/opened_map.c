@@ -146,7 +146,7 @@ static size_t GetDoubleAddress(opened_map_t* table, const int key)
     size_t index1 = BitHash(key, table->cap);
     size_t index2 = key % (table->cap - 1) + 1;
 
-    size_t index = (index1 + index2) % table->cap;
+    size_t index = index1 % table->cap;
 
     do
     {
@@ -159,8 +159,6 @@ static size_t GetDoubleAddress(opened_map_t* table, const int key)
             return index;
 
         index = (index + index2) % (table->cap);
-
-        //printf("index %d %d\n", index2, table->cap);
     }
     while (true);
 }

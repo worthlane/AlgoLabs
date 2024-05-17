@@ -18,6 +18,7 @@ static void ListedMapResize(listed_map_t* table);
 struct list_elem_t* ListElemCtor()
 {
 	struct list_elem_t* node = (struct list_elem_t*) calloc(1, sizeof(struct list_elem_t));
+	assert(node);
 
 	node->next = node;
 	node->prev = node;
